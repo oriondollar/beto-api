@@ -1,2 +1,0 @@
-FLASK_APP=beto_api.py
-FLASK_DEBUG=1
