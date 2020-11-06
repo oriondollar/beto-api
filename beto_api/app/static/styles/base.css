@@ -1,0 +1,65 @@
+@font-face {
+  font-family: appleGaramond;
+  src: url( font/AppleGaramond-Light.ttf );
+}
+
+@font-face {
+  font-family: motterTektura;
+  src: url( font/mottertektura.ttf );
+}
+
+@font-face {
+  font-family: lesterBold;
+  src: url( font/LesterBold-Regular.ttf );
+}
+
+@font-face {
+  font-family: alba;
+  src: url (font/ALBAS___.TTF );
+}
+
+* {
+  font-family: appleGaramond;
+}
+
+body, html {
+  height: 100%;
+  background-color: #D7D1B9;
+}
+
+li > a {
+  font-family: motterTektura;
+  font-size: 16px;
+  color: #D7D1B9;
+}
+
+.navbar-custom {
+    background-color: #1A1F1D;
+    border-radius: 0px;
+}
+
+.navbar-custom .navbar-nav > li > a:hover {
+  background-color: #1A1F1D;
+  color: #D7D1B9;
+  /* background: red;
+  background: -webkit-linear-gradient(left, purple, blue, red, yellow, green);
+  background: -o-linear-gradient(right, purple, blue, red, yellow, green);
+  background: -moz-linear-gradient(right, purple, blue, red, yellow, green);
+  background: linear-gradient(to right, purple, blue, red, yellow, green);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+}
+
+a.navbar-brand {
+  font-family: lesterBold;
+  font-size: 32px;
+  color: #D7D1B9;
+}
+
+.bgimg-1 {
+  background-image: url( img/base_background.png );
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

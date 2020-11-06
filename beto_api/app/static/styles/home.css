@@ -1,0 +1,141 @@
+@font-face {
+  font-family: appleGaramond;
+  src: url( font/AppleGaramond-Light.ttf );
+}
+
+@font-face {
+  font-family: motterTektura;
+  src: url( font/mottertektura.ttf );
+}
+
+@font-face {
+  font-family: lesterBold;
+  src: url( font/LesterBold-Regular.ttf );
+}
+
+@font-face {
+  font-family: alba;
+  src: url (font/ALBAS___.TTF );
+}
+
+body, html {
+  height: 100%;
+  background-color: #D7D1B9;
+}
+
+h1 {
+  font-size: 10vw;
+}
+
+h2 {
+  font-size: 6vw;
+}
+
+.bgimg-1 {
+  background-image: url( img/vintage_apple.png );
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#title {
+  position:relative;
+  top:40px;
+}
+
+.row {
+  text-align: center;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.apple-welcome {
+  font-family: appleGaramond;
+  font-weight: bold;
+
+  position:relative;
+  text-align:center;
+}
+
+.apple-tothe {
+  font-family: appleGaramond;
+  font-weight: bold;
+
+  position:relative;
+  text-align:center;
+  top:-30px;
+}
+
+.apple-digital {
+  font-family: motterTektura;
+  font-weight: bold;
+  font-size: 8.5vw;
+
+  position:relative;
+  text-align:center;
+  top:-45px;
+}
+
+.apple-labelathon {
+  font-family: appleGaramond;
+  font-weight: bold;
+
+  position:relative;
+  text-align:center;
+  top:-75px;
+}
+
+a.apple-button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  font-family: appleGaramond;
+  font-size: 3vw;
+
+  background-color: #EFEFEF;
+  color: black;
+  border-color: black;
+  border-width: 0.5px;
+  border-radius:0px;
+
+  text-align:center;
+  width:75%;
+  margin-top:15px;
+}
+
+.btn-primary:hover {
+  background-color: #e0e0e0;
+  color: black;
+  border-color: black
+}
+
+.BETO {
+  position: absolute;
+  width: 20%;
+  bottom: 0px;
+  right: 0px;
+  margin-right: 10px;
+}
+
+.VHS {
+  font-family: lesterBold;
+  font-size: 3vw;
+  color: black;
+
+  border: 3px solid black;
+
+  text-align: center;
+  margin: auto;
+  padding: 0px;
+  line-height: 0.9;
+  width: 50%;
+}
+
+.AI {
+  font-family: alba;
+  font-size: 1vw;
+  color: black;
+
+  text-align:center;
+}

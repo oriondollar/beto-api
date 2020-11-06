@@ -1,0 +1,46 @@
+{% extends "bootstrap/base.html" %}
+
+{% block styles %}
+  {{super()}}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css')}}">
+{% endblock %}
+{% block content %}
+  <div class="bgimg-1">
+      <div class="container">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-info" role="alert">{{ message }}</div>
+              {% endfor %}
+          {% endif %}
+          {% endwith %}
+
+          {# application content needs to be provided in the app_content block #}
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12" id="title">
+                  <h2 class="apple-welcome">Welcome</h1>
+                  <h2 class="apple-tothe">to the</h2>
+                  <h2 class="apple-digital">D I G I T A L</h1>
+                  <h1 class="apple-labelathon">Label-A-Thon</h1>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <a class="btn btn-primary apple-button" href="{{ url_for('login') }}" role="button">Sign In</a><br>
+              </div>
+              <div class="col-md-6">
+                <a class="btn btn-primary apple-button" href="{{ url_for('register') }}" role="button">Register</a>
+              </div>
+            </div>
+          </div>
+          <div class="BETO">
+            <p class="VHS">BETO</p>
+            <p class="AI">Artifical Intelligence</p>
+          </div>
+      </div>
+  </div>
+  <audio autoplay="autoplay">
+    <source src="static/styles/audio/2hot2stop.mp3" type="audio/mpeg">
+  </audio>
+{% endblock %}
