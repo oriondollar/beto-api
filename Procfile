@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn beto_api:app
+web: gunicorn beto_api:app
