@@ -9,6 +9,9 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 @app.route('/')
+def index():
+    return redirect(url_for('home'))
+    
 @app.route('/home')
 def home():
     return render_template('home.html')
