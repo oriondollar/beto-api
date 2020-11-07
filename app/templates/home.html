@@ -5,9 +5,6 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/home.css')}}">
 {% endblock %}
 {% block content %}
-  <audio autoplay="autoplay">
-    <source src="static/styles/audio/2hot2stop.mp3" type="audio/mpeg">
-  </audio>
   <div class="bgimg-1">
       <div class="container">
           {% with messages = get_flashed_messages() %}
@@ -43,4 +40,7 @@
           </div>
       </div>
   </div>
+<audio autoplay preload="auto">
+  <source src="static/styles/audio/2hot2stop.mp3" type="audio/mpeg">
+</audio>
 {% endblock %}
