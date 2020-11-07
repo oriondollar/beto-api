@@ -11,7 +11,7 @@ from werkzeug.urls import url_parse
 @app.route('/')
 def index():
     return redirect(url_for('home'))
-    
+
 @app.route('/home')
 def home():
     return render_template('home.html')
@@ -27,9 +27,9 @@ def label():
     irrelevant_perc = round(current_irrelevant / irrelevant_goal * 100, 1)
     rand_dec = np.random.random()
     if rand_dec >= 0.5:
-        primary_keys = db.session.query(Abstract.id).filter(Abstract.relevance_classification == 'NaN').filter_by(has_corros=1).all()
+        primary_keys = db.session.query(Abstract.id).filter(Abstract.relevance_classification == -1).filter_by(has_corros=1).all()
     elif rand_dec < 0.5:
-        primary_keys = db.session.query(Abstract.id).filter(Abstract.relevance_classification == 'NaN').filter_by(has_corros=0).all()
+        primary_keys = db.session.query(Abstract.id).filter(Abstract.relevance_classification == -1).filter_by(has_corros=0).all()
     random_key = primary_keys[int(np.random.choice(np.arange(len(primary_keys)), size=1))][0]
     abstract = Abstract.query.get(random_key)
     form = LabelForm()
