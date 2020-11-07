@@ -9,14 +9,17 @@ class Abstract(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     pub_year = db.Column(db.Integer)
-    pii = db.Column(db.String(24), index=True)
-    doi = db.Column(db.String(60), index=True)
-    title = db.Column(db.String(700), index=True)
-    text = db.Column(db.String(10000))
-    journal_name = db.Column(db.String(500))
+    pii = db.Column(db.String(), index=True)
+    doi = db.Column(db.String(), index=True)
+    title = db.Column(db.String(), index=True)
+    text = db.Column(db.String())
+    journal_name = db.Column(db.String())
     has_corros = db.Column(db.Integer)
     relevance_classification = db.Column(db.Integer)
     edits = db.relationship('Edit', backref='abstract', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(Abstract, self).__init__(**kwargs)
 
     def __repr__(self):
         return '<Abstract {}>'.format(self.pii)
@@ -25,10 +28,13 @@ class User(UserMixin, db.Model):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
+    username = db.Column(db.String(), index=True, unique=True)
+    email = db.Column(db.String(), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     edits = db.relationship('Edit', backref='editor', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -46,9 +52,12 @@ class Edit(db.Model):
     abstract_id = db.Column(db.Integer, db.ForeignKey('abstract.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    edit_type = db.Column(db.String(64))
-    old_val = db.Column(db.String(512))
-    new_val = db.Column(db.String(512))
+    edit_type = db.Column(db.String())
+    old_val = db.Column(db.String())
+    new_val = db.Column(db.String())
+
+    def __init__(self, **kwargs):
+        super(Edit, self).__init__(**kwargs)
 
     def __repr__(self):
         return '<Edit {} - {} in {} on {}>'.format(user_id, edit_type, abstract_id, timestamp)
