@@ -19,10 +19,10 @@ def home():
 @app.route('/label', methods=['GET', 'POST'])
 @login_required
 def label():
-    relevant_goal = 200
-    irrelevant_goal = 600
-    current_relevant = 54
-    current_irrelevant = 189
+    relevant_goal = 50
+    irrelevant_goal = 150
+    current_relevant = len(Edit.query.filter_by(new_val = '1').all())
+    current_irrelevant = len(Edit.query.filter_by(new_val = '0').all())
     relevant_perc = round(current_relevant / relevant_goal * 100, 1)
     irrelevant_perc = round(current_irrelevant / irrelevant_goal * 100, 1)
     rand_dec = np.random.random()
