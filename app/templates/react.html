@@ -10,15 +10,8 @@
 {% endblock %}
 {% block app_content %}
 <div class="container">
-  <div class="col-md-1">
-  </div>
-  <div class="col-md-10 sci-text">
-    <h4 class="title"><b>{{ title|safe }}</b></h4>
-    <p class="doi"><em>doi:{{ doi }}</em></p>
-    <p class="abstract">{{ text|safe }}</p>
-  </div>
-  <div class="col-md-1">
+  <div id="content">
   </div>
 </div>
-<script src="{{ url_for('static', filename='js/label.js')}}"></script>
+<script src="{{ url_for('static', filename='dist/bundle.js')}}"></script>
 {% endblock %}

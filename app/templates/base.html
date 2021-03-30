@@ -23,7 +23,9 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('classify') }}">Classify</a></li>
                 <li><a href="{{ url_for('label') }}">Label</a></li>
+                <li><a href="{{ url_for('react') }}">React</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_anonymous %}

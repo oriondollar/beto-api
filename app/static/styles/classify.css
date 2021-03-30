@@ -1,0 +1,28 @@
+.classify {
+  font-size: 115%;
+  text-align: center;
+  transform: translate(10%, 50%);
+}
+
+.entity {
+  color: blue;
+}
+
+.progress {
+  width: 50%
+}
+
+#label-submit {
+  font-size: 150%;
+}
+
+.label-container {
+  margin-top: 25px;
+}
+
+#bar-label {
+  width: 50%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 120%;
+}

@@ -1,4 +1,120 @@
-.classify {
+.title {
+  font-size: 2.5vw;
+}
+
+.doi {
+  font-size: 1.25vw;
+}
+
+.abstract {
+  font-size: 1vw;
+}
+
+.abstract:hover {
+  cursor: pointer;
+}
+
+.entity {
+  border-radius: 5px;
+  color: #D7D1B9;
+  padding: .01em .1em;
+}
+
+.entity:hover {
+  padding: .05em .15em;
+  cursor: pointer;
+}
+
+.selected {
+  padding: .05em .15em;
+  font-weight: 'bold';
+}
+
+.interactive-menu {
+  margin-top: 25px;
+  margin-left: -50px;
+}
+
+.category {
+  border-radius: 5px;
+  color: #D7D1B9;
+  padding: .025em .5em;
+  margin-left: 5px;
+}
+
+.mol {
+  background-color: #e56b6f;
+}
+
+.cpt {
+  background-color: #2A9D8F;
+}
+
+.pro {
+  background-color: #264653;
+}
+
+.cmt {
+  background-color: #E76F51;
+}
+
+.smt {
+  background-color: #00296b;
+}
+
+.equip {
+  background-color: #f94144;
+}
+
+.dsc {
+  background-color: #3a5a40;
+}
+
+.submit-labels {
+  margin-top: 75px;
+}
+
+a.apple-button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  font-family: appleGaramond;
+  font-size: 2vw;
+
+  background-color: #EFEFEF;
+  color: black;
+  border-color: black;
+  border-width: 0.5px;
+  border-radius:0px;
+
+  text-align:center;
+  width:75%;
+  margin-top:15px;
+}
+
+[tabindex="0"] {
+  outline: none;
+}
+
+/* Test Formatting */
+.alert {
+  padding: 15px;
+  border: 1px solid #d6e9c6;
+  border-radius: 4px;
+  color: #3c763d;
+  background-color: #dff0d8;
+  position: absolute;
+}
+
+/* ul {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  list-style-type: disc;
+  list-style-position: inside;
+} */
+
+/* .classify {
   font-size: 115%;
   text-align: center;
   transform: translate(10%, 50%);
@@ -21,4 +137,4 @@
   text-align: center;
   font-weight: bold;
   font-size: 120%;
-}
+} */
