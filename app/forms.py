@@ -1,3 +1,4 @@
+from app import mongodb
 from app.models import User
 
 from flask_wtf import FlaskForm
@@ -25,12 +26,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = mongodb.Users.find_one({'_id': username.data})
         if user is not None:
             raise ValidationError('This username is already in use.')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = mongodb.Users.find_one({'email': email.data})
         if user is not None:
             raise ValidationError('This email address is already in use.')
         email_server = email.data.split('.')[-1]
