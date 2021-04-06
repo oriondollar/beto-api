@@ -64,7 +64,10 @@ def get_db_entry(doi):
     entry = mongodb.Corpus.find_one({'_id': doi})
     title = entry['Title']
     abstract = entry['Abstract']
-    fulltext = entry['FullText']
+    try:
+        fulltext = entry['FullText']
+    except KeyError:
+        fulltext = {'Body': [], 'RefCites': []}
     try:
         keywords = entry['Keywords']
     except KeyError:
