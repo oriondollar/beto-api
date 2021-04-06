@@ -61,6 +61,7 @@ def get_db_entry(doi):
     # keywords = ['coating', 'molecular', 'base', 'deposition', 'steel', 'chemical', 'organic', 'polymer', 'degradation', 'inhibit']
     # metadata = {'Field': ['Environmental Science', 'Chemistry', 'Medicine'], 'Authors': [{'first': 'Karin', 'middle': [], 'last': 'Björklund', 'suffix': ''}, {'first': 'Ann-Margret', 'middle': [], 'last': 'Strömvall', 'suffix': ''}, {'first': 'Per-Arne', 'middle': [], 'last': 'Malmqvist', 'suffix': ''}], 'PubYear': 2011, 'JournalName': 'Water science and technology : a journal of the International Association on Water Pollution Research', 'Source': 'stork', 'RawType': 'pdf/latex'}
     # title = 'Screening of organic contaminants in urban snow'
+    print(doi)
     entry = mongodb.Corpus.find_one({'_id': doi})
     title = entry['Title']
     abstract = entry['Abstract']
