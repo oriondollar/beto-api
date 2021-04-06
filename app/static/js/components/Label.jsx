@@ -1,9 +1,9 @@
 import React from "react";
-import Entity from "./components/Entity";
-import LabelMenu from "./components/LabelMenu";
+import Entity from "./Entity";
+import LabelMenu from "./LabelMenu";
 
 
-export default class App extends React.Component {
+export default class Label extends React.Component {
 
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    fetch("/api/test/")
+    fetch("/api/rand/")
       .then(res => res.json())
       .then(
         (result) => {
@@ -162,19 +162,21 @@ export default class App extends React.Component {
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
       return (
-        <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
-          <div className="row">
-            <div className="col-sm-1">
+        <div className="bgimg-1">
+          <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
+            <div className="row">
+              <div className="col-sm-1">
+              </div>
+              <div className="col-md-10 sci-text">
+                <h4 className="title"><b>{title}</b></h4>
+                <p className="doi"><em>doi:{doi}</em></p>
+                {abstractJSX}
+              </div>
+              <div className="col-sm-1">
+              </div>
             </div>
-            <div className="col-md-10 sci-text">
-              <h4 className="title"><b>{title}</b></h4>
-              <p className="doi"><em>doi:{doi}</em></p>
-              {abstractJSX}
-            </div>
-            <div className="col-sm-1">
-            </div>
+            <LabelMenu getRadioInfo={this.getRadioInfo}/>
           </div>
-          <LabelMenu getRadioInfo={this.getRadioInfo}/>
         </div>
       );
     }

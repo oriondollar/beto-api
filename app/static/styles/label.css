@@ -1,13 +1,43 @@
+.bgimg-1 {
+  background-image: url( img/base_background.png );
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .title {
   font-size: 2.5vw;
+}
+
+.meta {
+  font-size: 1vw;
+  background-color: white;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  border-color: black;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.xout {
+  text-align: right;
+  color: red;
+  background-color: white;
+  margin-left: 98%;
 }
 
 .doi {
   font-size: 1.25vw;
 }
 
+.text {
+  font-size: 1.25vw;
+}
+
 .abstract {
-  font-size: 1vw;
+  font-size: 1.25vw;
 }
 
 .abstract:hover {
@@ -105,6 +135,92 @@ a.apple-button {
   background-color: #dff0d8;
   position: absolute;
 }
+
+.search-bar {
+  width: 100%;
+  font-size: 2vw;
+}
+
+div.form {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+#betogoogle {
+  padding-top: 75px;
+  font-size: 15vw;
+  text-align: center;
+}
+
+
+
+
+
+.react-autosuggest__container {
+  position: relative;
+}
+
+.react-autosuggest__input {
+  width: 80%;
+  height: 45px;
+  padding: 10px 20px;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.react-autosuggest__input--focused {
+  outline: none;
+}
+
+.react-autosuggest__input--open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+  display: inline-block;
+  top: 51px;
+  width: 80%;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  z-index: 2;
+}
+
+.react-autosuggest__suggestions-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.react-autosuggest__suggestion {
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background-color: #ddd;
+}
+
+.footer {
+  margin: 9px 20px;
+  font-size: 12px;
+  color: #777;
+}
+
+
 
 /* ul {
   columns: 2;

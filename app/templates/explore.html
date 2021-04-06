@@ -8,9 +8,11 @@
   {{super()}}
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 {% endblock %}
-{% block app_content %}
-<div class="container">
-  <div id="content">
+{% block content %}
+<div id="content">
+  <div class="container">
+      <div id="content">
+      </div>
   </div>
 </div>
 <script src="{{ url_for('static', filename='dist/bundle.js')}}"></script>

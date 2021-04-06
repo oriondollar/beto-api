@@ -14,9 +14,8 @@ with open('.hidden_config.txt', 'r') as f:
     for line in f:
         line = line.split(':')
         hidden_config[line[0]] = line[1].split('\n')[0]
-mongodb = MongoClient('mongodb+srv://{}:{}@beto-corpora.cljbt.mongodb.net/Corpus?retryWrites=true&w=majority'.format(hidden_config['DATABASE_USERNAME'], hidden_config['DATABASE_PASSWORD'])).beto_corpora
-# db = SQLAlchemy(app)
-# migrate = Migrate(app, db)
+mongodb = MongoClient('localhost', 27017).beto_corpora
+# mongodb = MongoClient('mongodb+srv://{}:{}@beto-corpora.cljbt.mongodb.net/Corpus?retryWrites=true&w=majority'.format(hidden_config['DATABASE_USERNAME'], hidden_config['DATABASE_PASSWORD'])).beto_corpora
 login = LoginManager(app)
 login.login_view = 'login'
 bootstrap = Bootstrap(app)
