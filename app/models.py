@@ -50,7 +50,6 @@ class User:
 
 @login.user_loader
 def load_user(id):
-    print(mongodb.Users)
     return User(mongodb.Users.find_one({'_id': id})['_id'])
 
 # class Abstract(db.Model):
