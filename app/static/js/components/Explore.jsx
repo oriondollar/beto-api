@@ -78,6 +78,11 @@ export default class Explore extends React.Component {
     })
   }
 
+  randQuery = () => {
+    let randDOI = this.state.doi_suggestions[Math.floor(Math.random() * this.state.doi_suggestions.length)].name;
+    this.runQuery(randDOI);
+  }
+
   genExploreJSX = () => {
     if (this.state.isSearched) {
       let author_string = '';
@@ -134,7 +139,14 @@ export default class Explore extends React.Component {
               </div>
             );
     } else if (!this.state.isSearched) {
-      return <Search dois={this.state.doi_suggestions} runQuery={this.runQuery}/>
+      return (
+          <div id="parent">
+            <Search dois={this.state.doi_suggestions} runQuery={this.runQuery}/>
+            <div id="lucky-div">
+              <button className="lucky-button" onClick={this.randQuery}>Feeling Lucky?</button>
+            </div>
+          </div>
+      )
     }
   }
 

@@ -122,6 +122,31 @@ a.apple-button {
   margin-top:15px;
 }
 
+.lucky-button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  font-family: appleGaramond;
+  font-size: 2.5vw;
+  display: inline-block;
+
+  background-color: #EFEFEF;
+  color: black;
+  border-color: black;
+  border-width: 0.5px;
+  border-radius:0px;
+
+  text-align:center;
+  width:30%;
+  margin-top:60px;
+}
+
+#lucky-div {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
 [tabindex="0"] {
   outline: none;
 }
