@@ -90,7 +90,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('classify')
+            next_page = url_for('explore')
         return redirect(next_page)
         # user = User.query.filter_by(username=form.username.data).first()
         # if user is None or not user.check_password(form.password.data):
@@ -121,4 +121,4 @@ def register():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     logout_user()
-    return redirect(url_for('classify'))
+    return redirect(url_for('home'))
