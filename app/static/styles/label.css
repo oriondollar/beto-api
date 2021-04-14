@@ -185,6 +185,11 @@ div.form {
   left: 0px;
 }
 
+.audiodiv {
+  length: 100%;
+  width: 100%;
+}
+
 
 .react-autosuggest__container {
   position: relative;
