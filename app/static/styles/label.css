@@ -179,10 +179,10 @@ div.form {
 }
 
 
-audio {
-  bottom: 0;
+#fixed {
+  bottom: 0px;
   position: fixed;
-  right: 0;
+  left: 0px;
 }
 
 

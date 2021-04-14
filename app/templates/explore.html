@@ -15,8 +15,10 @@
       </div>
   </div>
 </div>
-<audio controls autoplay preload="auto">
-  <source src="static/styles/audio/borntired.mp3" type="audio/mpeg">
-</audio>
+<div class="container">
+  <audio controls autoplay preload="auto" id="fixed">
+    <source src="static/styles/audio/borntired.mp3" type="audio/mpeg">
+  </audio>
+</div>
 <script src="{{ url_for('static', filename='dist/bundle.js')}}"></script>
 {% endblock %}
