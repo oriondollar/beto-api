@@ -44,7 +44,7 @@ export default class Explore extends React.Component {
   }
 
   runQuery = (query) => {
-    query = query.replace('/', '_')
+    query = query.split('/').join('_')
     fetch(`/api/${query}`)
       .then(res => res.json())
       .then(
@@ -122,7 +122,6 @@ export default class Explore extends React.Component {
           bodyArray.push(section_text);
         });
       }
-      console.log(bodyArray);
       return (<div id="parent">
                 <button className="xout" onClick={this.exitQuery}>X</button>
                 <h4 className="title" style={{textAlign: "center"}}><b>{this.state.entry.title}</b></h4>
