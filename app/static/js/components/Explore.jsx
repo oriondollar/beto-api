@@ -5,6 +5,7 @@ export default class Explore extends React.Component {
 
   constructor(props) {
     super(props);
+    this.sendRel = this.sendRel.bind(this);
     this.state = {
       error: null,
       isLoaded: false,
@@ -15,7 +16,17 @@ export default class Explore extends React.Component {
               "abstract": null,
               "fulltext": null,
               "keywords": null,
-              "metadata": null}
+              "metadata": null},
+      classes: {"CI": "CI-button",
+		"FR": "FR-button",
+		"BioMin": "BioMin-button",
+		"zero": "zero-button",
+		"one": "one-button",
+		"two": "two-button"},
+      submitClass: "relevance-submit",
+      submitMessage: "",
+      catSelect: null,
+      relSelect: null
     };
   }
 
@@ -44,7 +55,7 @@ export default class Explore extends React.Component {
   }
 
   runQuery = (query) => {
-    query = query.split('/').join('_')
+    query = query.split('/').join('*')
     fetch(`/api/${query}`)
       .then(res => res.json())
       .then(
@@ -72,9 +83,103 @@ export default class Explore extends React.Component {
       )
   }
 
+  selRel = (e) => {
+    let target_id = e.target.id.split('-');
+    let cats = ['CI', 'FR', 'BioMin'];
+    let rels = ['zero', 'one', 'two'];
+    if (cats.includes(target_id[0])) {
+      let catSelect = target_id[0];
+      let CIClass;
+      let FRClass;
+      let BioMinClass;
+      if (catSelect == 'CI') {
+	CIClass = 'CI-button-selected';
+	FRClass = 'FR-button';
+	BioMinClass = 'BioMin-button';
+      } else if (catSelect == 'FR') {
+	CIClass = 'CI-button';
+	FRClass = 'FR-button-selected';
+	BioMinClass = 'BioMin-button'
+      } else if (catSelect == 'BioMin') {
+	CIClass = 'CI-button';
+	FRClass = 'FR-button';
+	BioMinClass = 'BioMin-button-selected';
+      }
+      this.setState(prevState => {
+	let classes = { ...prevState.classes };
+	classes.CI = CIClass;
+	classes.FR = FRClass;
+	classes.BioMin = BioMinClass;
+	return { classes };
+      });
+      this.setState({
+	catSelect: catSelect
+      });
+    } else if (rels.includes(target_id[0])) {
+      let relSelect = target_id[0];
+      let zeroClass;
+      let oneClass;
+      let twoClass;
+      if (relSelect == 'zero') {
+	zeroClass = 'zero-button-selected';
+	oneClass = 'one-button';
+	twoClass = 'two-button';
+      } else if (relSelect == 'one') {
+	zeroClass = 'zero-button';
+	oneClass = 'one-button-selected';
+	twoClass = 'two-button';
+      } else if (relSelect == 'two') {
+	zeroClass = 'zero-button';
+	oneClass = 'one-button';
+	twoClass = 'two-button-selected';
+      }
+      this.setState(prevState => {
+	let classes = { ...prevState.classes };
+	classes.zero = zeroClass;
+	classes.one = oneClass;
+	classes.two = twoClass;
+	return { classes };
+      });
+      this.setState({
+	relSelect: relSelect
+      });
+    }
+  }
+
+  async sendRel() {
+    let doi = this.state.entry.doi;
+    let catSelect = this.state.catSelect;
+    let relSelect = this.state.relSelect;
+    let timeStamp = Date.now()
+    let dataPacket = {doi, catSelect, relSelect, timeStamp};
+    let response = await fetch('/api/post_classify', {
+      method: 'POST',
+      headers: {
+	'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataPacket)
+    })
+
+    if (response.ok) {
+      console.log("response worked!");
+      this.setState({
+	submitMessage: "submitted!"
+      });
+    }
+  }
+
+  formatSubmit = (e) => {
+    if (e.type == 'mousedown') {
+      this.setState({submitClass: "relevance-submit-down"});
+    } else {
+      this.setState({submitClass: "relevance-submit"});
+    }
+  }
+
   exitQuery = () => {
     this.setState({
-      isSearched: false
+      isSearched: false,
+      submitMessage: ""
     })
   }
 
@@ -90,10 +195,14 @@ export default class Explore extends React.Component {
         author_string += `${author.first} ${author.last}, `;
       });
       author_string = author_string.slice(0, -2);
-      let field_string = '';
-      this.state.entry.metadata.Field.forEach(field => {
-        field_string += `${field}, `
-      });
+      let field_string = ''
+      if (this.state.entry.metadata.Field == null) {
+	//pass
+      } else {
+	this.state.entry.metadata.Field.forEach(field => {
+	field_string += `${field}, `
+	});
+      }
       field_string = field_string.slice(0, -2);
       let keyword_string = '';
       this.state.entry.keywords.forEach(keyword => {
@@ -123,18 +232,33 @@ export default class Explore extends React.Component {
         });
       }
       return (<div id="parent">
-                <button className="xout" onClick={this.exitQuery}>X</button>
-                <h4 className="title" style={{textAlign: "center"}}><b>{this.state.entry.title}</b></h4>
-                <div className="meta">
-                  <p><em>{this.state.entry.metadata.JournalName} ({this.state.entry.metadata.PubYear})</em></p>
-                  <p><em>Authors: {author_string}</em></p>
-                  <p><em>Fields: {field_string}</em></p>
-                  <p><em>Keywords: {keyword_string}</em></p>
-                  <p><em>doi:{this.state.entry.doi}</em></p>
-                </div>
-                <p className="text">{this.state.entry.abstract}</p>
-                <p style={{textAlign: "center", fontSize: "90px"}}>-</p>
-                <div className="fulltext">{ bodyArray }</div>
+		<div id="relevance_column">
+		  <p className="menu text"><b></b></p>
+		  <button id={this.state.classes.CI} onClick={this.selRel} title="Corrosion Inhibitors"/>
+		  <button id={this.state.classes.FR} onClick={this.selRel} title="Flame Retardants"/>
+		  <button id={this.state.classes.BioMin} onClick={this.selRel} title="Biomineralization"/>
+		  <p></p>
+		  <button id={this.state.classes.zero} onClick={this.selRel} title="Not Relevant"/>
+		  <button id={this.state.classes.one} onClick={this.selRel} title="Somewhat Relevant"/>
+		  <button id={this.state.classes.two} onClick={this.selRel} title="Very Relevant"/>
+   		  <p></p>
+		  <button id={this.state.submitClass} onClick={this.sendRel} onMouseDown={this.formatSubmit} onMouseUp={this.formatSubmit}>Submit</button>
+		  <p id="submit-message">{this.state.submitMessage}</p>
+		</div>
+		<div id="scitext_column">
+                  <button className="xout" onClick={this.exitQuery}>X</button>
+                  <h4 className="title" style={{textAlign: "center"}}><b>{this.state.entry.title}</b></h4>
+                  <div className="meta">
+                    <p><em>{this.state.entry.metadata.JournalName} ({this.state.entry.metadata.PubYear})</em></p>
+                    <p><em>Authors: {author_string}</em></p>
+                    <p><em>Fields: {field_string}</em></p>
+                    <p><em>Keywords: {keyword_string}</em></p>
+                    <p><em>doi:{this.state.entry.doi}</em></p>
+                  </div>
+                  <p className="text">{this.state.entry.abstract}</p>
+                  <p style={{textAlign: "center", fontSize: "90px"}}>-</p>
+                  <div className="fulltext">{ bodyArray }</div>
+		</div>
               </div>
             );
     } else if (!this.state.isSearched) {
