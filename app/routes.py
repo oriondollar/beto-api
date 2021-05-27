@@ -14,6 +14,7 @@ def index():
 
 @app.route('/home')
 def home():
+    print('hey')
     return render_template('home.html')
 
 @app.route('/explore', methods=['GET'])

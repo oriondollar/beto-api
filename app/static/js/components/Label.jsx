@@ -1,7 +1,7 @@
 import React from "react";
 import Entity from "./Entity";
 import LabelMenu from "./LabelMenu";
-
+import RelationshipMenu from "./RelationshipMenu";
 
 export default class Label extends React.Component {
 
@@ -15,11 +15,13 @@ export default class Label extends React.Component {
       text: null,
       entities: null,
       selectedEntityID: null,
-      selectedEntityCategory: 'entity cpt'
+      selectedEntityCategory: 'entity cpt',
+      menuType: 'relationships'
     };
   }
 
   componentDidMount() {
+    console.log('made it!')
     fetch("/api/rand/")
       .then(res => res.json())
       .then(
@@ -153,6 +155,11 @@ export default class Label extends React.Component {
     return <p className="abstract" onMouseUp={this.createNewEntity}>{ JSXArray }</p>
   }
 
+  renderMenu() {
+    if (this.state.menuType === 'label') return <LabelMenu getRadioInfo={this.getRadioInfo}/>;
+    return <RelationshipMenu/>;  
+  }
+
   render() {
     const { error, isLoaded, title, doi, text, entities } = this.state;
     if (error) {
@@ -175,7 +182,7 @@ export default class Label extends React.Component {
               <div className="col-sm-1">
               </div>
             </div>
-            <LabelMenu getRadioInfo={this.getRadioInfo}/>
+	    { this.renderMenu() } 
           </div>
         </div>
       );
