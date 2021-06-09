@@ -16,12 +16,12 @@ export default class Label extends React.Component {
       entities: null,
       selectedEntityID: null,
       selectedEntityCategory: 'entity cpt',
-      menuType: 'relationships'
+      menuType: 'label'
     };
   }
 
   componentDidMount() {
-    console.log('made it!')
+    console.log('we really made it!')
     fetch("/api/rand/")
       .then(res => res.json())
       .then(
