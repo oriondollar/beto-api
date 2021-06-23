@@ -1,5 +1,5 @@
 .bgimg-1 {
-  background-image: url( img/base_background.png );
+  background-image: url(img/base_background.png);
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -45,24 +45,28 @@
   margin-left: 150px;
 }
 
-.abstract:hover {
+.abstract:hover:not(.para.relation) {
   cursor: pointer;
 }
 
 .entity {
   border-radius: 5px;
-  color: #D7D1B9;
-  padding: .01em .1em;
+  color: #d7d1b9;
+  padding: 0.01em 0.1em;
 }
 
 .entity:hover {
-  padding: .05em .15em;
+  padding: 0.05em 0.15em;
   cursor: pointer;
 }
 
 .selected {
-  padding: .05em .15em;
-  font-weight: 'bold';
+  padding: 0.05em 0.15em;
+  font-weight: "bold";
+}
+
+.text.relation {
+  color: grey;
 }
 
 .interactive-menu {
@@ -70,38 +74,49 @@
   margin-left: -50px;
 }
 
-.category {
+.relationship {
   border-radius: 5px;
-  color: #D7D1B9;
-  padding: .025em .5em;
+  color: #d7d1b9;
+  padding: 0.025em 0.5em;
   margin-left: 5px;
 }
 
-.mol {
+.category {
+  border-radius: 5px;
+  color: #d7d1b9;
+  padding: 0.025em 0.5em;
+  margin-left: 5px;
+}
+
+.toggle {
+  padding-top: 10em;
+}
+
+.mol, .res {
   background-color: #e56b6f;
 }
 
-.cpt {
-  background-color: #2A9D8F;
+.cpt, .prod {
+  background-color: #2a9d8f;
 }
 
-.pro {
+.pro, .infl {
   background-color: #264653;
 }
 
-.cmt {
-  background-color: #E76F51;
+.cmt, .char, .exam {
+  background-color: #e76f51;
 }
 
-.smt {
+.smt, .feat {
   background-color: #00296b;
 }
 
-.equip {
+.equip, .use {
   background-color: #f94144;
 }
 
-.dsc {
+.dsc, .syn {
   background-color: #3a5a40;
 }
 
@@ -109,6 +124,9 @@
   margin-top: 75px;
 }
 
+#row canv {
+  
+}
 #relevance_column {
   float: left;
   width: 30%;
@@ -127,24 +145,24 @@ a.apple-button {
   font-family: appleGaramond;
   font-size: 2vw;
 
-  background-color: #EFEFEF;
+  background-color: #efefef;
   color: black;
   border-color: black;
   border-width: 0.5px;
-  border-radius:0px;
+  border-radius: 0px;
 
-  text-align:center;
-  width:75%;
-  margin-top:15px;
+  text-align: center;
+  width: 75%;
+  margin-top: 15px;
 }
 
 #CI-button {
-  background-image: url( img/CI_icon_rs.png );
+  background-image: url(img/CI_icon_rs.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-left: 1vw;
   border-radius: 10px;
   border-width: 5px;
@@ -154,12 +172,12 @@ a.apple-button {
 }
 
 #CI-button-selected {
-  background-image: url( img/CI_icon_selected.png );
+  background-image: url(img/CI_icon_selected.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-left: 1vw;
   border-radius: 10px;
   border-width: 5px;
@@ -169,12 +187,12 @@ a.apple-button {
 }
 
 #FR-button {
-  background-image: url( img/FR_icon_rs.png );
+  background-image: url(img/FR_icon_rs.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-left: 7.25vw;
   border-radius: 10px;
   border-width: 5px;
@@ -184,12 +202,12 @@ a.apple-button {
 }
 
 #FR-button-selected {
-  background-image: url( img/FR_icon_selected.png );
+  background-image: url(img/FR_icon_selected.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-left: 7.25vw;
   border-radius: 10px;
   border-width: 5px;
@@ -199,12 +217,12 @@ a.apple-button {
 }
 
 #BioMin-button {
-  background-image: url( img/biomin_icon_rs.png );
+  background-image: url(img/biomin_icon_rs.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-left: 13.5vw;
   border-radius: 10px;
   border-width: 5px;
@@ -214,12 +232,12 @@ a.apple-button {
 }
 
 #BioMin-button-selected {
-  background-image: url( img/biomin_icon_selected.png );
+  background-image: url(img/biomin_icon_selected.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-left: 13.5vw;
   border-radius: 10px;
   border-width: 5px;
@@ -229,12 +247,12 @@ a.apple-button {
 }
 
 #zero-button {
-  background-image: url( img/0_icon.png );
+  background-image: url(img/0_icon.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-top: 6.25vw;
   margin-left: 1vw;
   border: none;
@@ -243,12 +261,12 @@ a.apple-button {
 }
 
 #zero-button-selected {
-  background-image: url( img/0_icon_selected.png );
+  background-image: url(img/0_icon_selected.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-top: 6.25vw;
   margin-left: 1vw;
   border: none;
@@ -257,12 +275,12 @@ a.apple-button {
 }
 
 #one-button {
-  background-image: url( img/1_icon.png );
+  background-image: url(img/1_icon.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-top: 6.25vw;
   margin-left: 7.25vw;
   border: none;
@@ -271,12 +289,12 @@ a.apple-button {
 }
 
 #one-button-selected {
-  background-image: url( img/1_icon_selected.png );
+  background-image: url(img/1_icon_selected.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-top: 6.25vw;
   margin-left: 7.25vw;
   border: none;
@@ -285,12 +303,12 @@ a.apple-button {
 }
 
 #two-button {
-  background-image: url( img/2_icon.png );
+  background-image: url(img/2_icon.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-top: 6.25vw;
   margin-left: 13.5vw;
   border: none;
@@ -299,12 +317,12 @@ a.apple-button {
 }
 
 #two-button-selected {
-  background-image: url( img/2_icon_selected.png );
+  background-image: url(img/2_icon_selected.png);
   background-position: center center;
   background-size: 100% 100%;
   height: 4.5vw;
   width: 4.5vw;
-  background-color: #D7D1B9;
+  background-color: #d7d1b9;
   margin-top: 6.25vw;
   margin-left: 13.5vw;
   border: none;
@@ -317,7 +335,7 @@ a.apple-button {
   height: 4vw;
   width: 17vw;
   text-align: center;
-  color: #D7D1B9;
+  color: #d7d1b9;
   font-family: motterTektura;
   font-size: 2.5vw;
   font-weight: bold;
@@ -333,7 +351,7 @@ a.apple-button {
   height: 4vw;
   width: 17vw;
   text-align: center;
-  color: #D7D1B9;
+  color: #d7d1b9;
   font-family: motterTektura;
   font-size: 2.5vw;
   font-weight: bold;
@@ -352,7 +370,6 @@ a.apple-button {
   position: fixed;
 }
 
-
 .lucky-button {
   -webkit-appearance: button;
   -moz-appearance: button;
@@ -361,21 +378,21 @@ a.apple-button {
   font-size: 2.5vw;
   display: inline-block;
 
-  background-color: #EFEFEF;
+  background-color: #efefef;
   color: black;
   border-color: black;
   border-width: 0.5px;
-  border-radius:0px;
+  border-radius: 0px;
 
-  text-align:center;
-  width:30%;
-  margin-top:60px;
+  text-align: center;
+  width: 30%;
+  margin-top: 60px;
 }
 
 #lucky-div {
-    display: block;
-    text-align: center;
-    width: 100%;
+  display: block;
+  text-align: center;
+  width: 100%;
 }
 
 [tabindex="0"] {
@@ -398,9 +415,9 @@ a.apple-button {
 }
 
 div.form {
-    display: block;
-    text-align: center;
-    width: 100%;
+  display: block;
+  text-align: center;
+  width: 100%;
 }
 
 #betogoogle {
@@ -408,7 +425,6 @@ div.form {
   font-size: 15vw;
   text-align: center;
 }
-
 
 #fixed {
   bottom: 0px;
@@ -420,7 +436,6 @@ div.form {
   length: 100%;
   width: 100%;
 }
-
 
 .react-autosuggest__container {
   position: relative;
@@ -485,8 +500,6 @@ div.form {
   color: #777;
 }
 
-
-
 /* ul {
   columns: 2;
   -webkit-columns: 2;
@@ -519,3 +532,4 @@ div.form {
   font-weight: bold;
   font-size: 120%;
 } */
+

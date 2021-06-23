@@ -19,7 +19,7 @@ export default class Label extends React.Component {
       selectedEntityCategory: "entity cpt",
       id: "annotation-mode",
       togname: "test",
-      checked: false,
+      checked: true,
       small: false,
       disabled: false,
       optionlabels: ["Label", "Link"],
@@ -194,11 +194,11 @@ export default class Label extends React.Component {
   genEntityDims = () => {
      let elements = document.getElementsByClassName("entity");
      console.log(elements);
-     
-     var arr =  Array.prototype.map.call(elements, element =>
-         element.getBoundingClientRect())
-     console.log(arr
+     var arr = Array.prototype.map.call(elements, (element) =>
+       element.getBoundingClientRect()
      );
+     console.log(arr);
+    //this.setState({ entityDims: arr });
     // Array.from(elements).forEach((element) => {
     //   console.log(elements[element].getBoundingClientRect());
     // });
@@ -209,7 +209,7 @@ export default class Label extends React.Component {
   };
 
   renderMenu() {
-    const isChecked = this.state.checked;
+    let isChecked = this.state.checked;
     if (isChecked) {
       return <LabelMenu getRadioInfo={this.getRadioInfo} />;
     }
@@ -244,6 +244,7 @@ export default class Label extends React.Component {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
+      this.genEntityDims();
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
@@ -260,9 +261,15 @@ export default class Label extends React.Component {
                 >
                   <em>doi:{doi}</em>
                 </p>
-                <RelationCanvas text={abstractJSX} />
+                <RelationCanvas text={abstractJSX}/> 
+              </div>
+              <div className="col-sm-1"></div>
+            </div>
+            <div className='row toggle'>
+              <div className='col-sm-1'></div>
+              <div className='col-md-10'>
                 <Toggle
-                  togname={togname}
+                 togname={togname}
                   id={id}
                   small={small}
                   disabled={disabled}
@@ -271,7 +278,7 @@ export default class Label extends React.Component {
                   optionlabels={optionlabels}
                 />
               </div>
-              <div className="col-sm-1"></div>
+              <div className='col-sm-1'></div>
             </div>
             {this.renderMenu()};
           </div>
@@ -280,3 +287,4 @@ export default class Label extends React.Component {
     }
   }
 }
+

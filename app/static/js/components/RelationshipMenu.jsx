@@ -65,6 +65,7 @@ class RelationshipMenu extends Component {
           className="col-md-6 interactive-menu"
           onChange={this.sendRadioChange}
         >
+	<ul>
             {this.state.radio.map((r) => (
               <ul>
                 <input
@@ -78,6 +79,7 @@ class RelationshipMenu extends Component {
                 <label className={r.className}> {r.labelName}</label>
               </ul>
             ))}
+	</ul>
         </div>
       </div>
     );
