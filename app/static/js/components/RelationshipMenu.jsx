@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class RelationshipMenu extends Component {
   constructor(props) {
@@ -65,22 +65,22 @@ class RelationshipMenu extends Component {
           className="col-md-6 interactive-menu"
           onChange={this.sendRadioChange}
         >
-          {this.state.radio.map((r) => (
-            <ul>
-              <input
-                type="radio"
-                id={r.id}
-                value={r.value}
-                name="relationship"
-                onClick={this.sendRadioClick}
-              />
-              <label className={r.className}> {r.labelName}</label>
-            </ul>
-          ))}
+            {this.state.radio.map((r) => (
+              <ul>
+                <input
+                  key={r.id}
+                  type="radio"
+                  id={r.id}
+                  value={r.value}
+                  name="relationship"
+                  onClick={this.sendRadioClick}
+                />
+                <label className={r.className}> {r.labelName}</label>
+              </ul>
+            ))}
         </div>
       </div>
     );
   }
 }
 export default RelationshipMenu;
-
