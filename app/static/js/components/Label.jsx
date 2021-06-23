@@ -2,9 +2,10 @@ import React from "react";
 import Entity from "./Entity";
 import LabelMenu from "./LabelMenu";
 import RelationshipMenu from "./RelationshipMenu";
+import RelationCanvas from "./RelationCanvas";
+import Toggle from "./Toggle";
 
 export default class Label extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -15,15 +16,22 @@ export default class Label extends React.Component {
       text: null,
       entities: null,
       selectedEntityID: null,
-      selectedEntityCategory: 'entity cpt',
-      menuType: 'relationships'
+      selectedEntityCategory: "entity cpt",
+      id: "annotation-mode",
+      togname: "test",
+      checked: false,
+      small: false,
+      disabled: false,
+      optionlabels: ["Label", "Link"],
+      entityDims: [],
     };
+    this.entityRef = React.createRef();
   }
 
   componentDidMount() {
-    console.log('made it!')
+    console.log("we really made it!");
     fetch("/api/rand/")
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(
         (result) => {
           this.setState({
@@ -31,16 +39,17 @@ export default class Label extends React.Component {
             title: result.content.title,
             doi: result.content.doi,
             text: result.content.text,
-            entities: result.content.entities
+            entities: result.content.entities,
           });
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components
+
         (error) => {
           this.setState({
             isLoaded: true,
-            error
+            error,
           });
         }
       );
@@ -49,9 +58,9 @@ export default class Label extends React.Component {
   getEntityInfo = (id, category) => {
     this.setState({
       selectedEntityID: id,
-      selectedEntityCategory: category
+      selectedEntityCategory: category,
     });
-  }
+  };
 
   getRadioInfo = (value) => {
     let entities = this.state.entities;
@@ -60,43 +69,46 @@ export default class Label extends React.Component {
     }
     this.setState({
       entities: entities,
-      selectedEntityCategory: value
-    })
-  }
+      selectedEntityCategory: value,
+    });
+  };
 
   handleKeyDown = (e) => {
     if (this.state.selectedEntityID !== null) {
       if (e.keyCode === 37) {
-        let newID = this.state.selectedEntityID - 1
+        let newID = this.state.selectedEntityID - 1;
         if (newID < 0) {
-          newID = this.state.entities.length - 1
+          newID = this.state.entities.length - 1;
         }
         this.setState({
-          selectedEntityID: newID
-        })
+          selectedEntityID: newID,
+        });
       } else if (e.keyCode === 39) {
-        let newID = this.state.selectedEntityID + 1
+        let newID = this.state.selectedEntityID + 1;
         if (newID >= this.state.entities.length) {
-          newID = 0
+          newID = 0;
         }
         this.setState({
-          selectedEntityID: newID
-        })
+          selectedEntityID: newID,
+        });
       } else if (e.keyCode === 8) {
-        let newEntities = this.state.entities.filter((val, idx) => this.state.selectedEntityID !== idx);
+        let newEntities = this.state.entities.filter(
+          (val, idx) => this.state.selectedEntityID !== idx
+        );
         this.setState({
-          entities: newEntities
-        })
+          entities: newEntities,
+        });
       }
     }
     if (e.keyCode === 38 || e.keyCode === 40) {
       e.preventDefault();
     }
-  }
+  };
 
   createNewEntity = (e) => {
-    if (e.target.tagName != 'SPAN') {
-      const selectionObj = (window.getSelection && window.getSelection());
+    const isChecked = this.state.checked;
+    if (e.target.tagName != "SPAN" && isChecked) {
+      const selectionObj = window.getSelection && window.getSelection();
       let startHighlightSpan = selectionObj.anchorOffset;
       let endHighlightSpan = selectionObj.focusOffset;
       let text = selectionObj.focusNode.data;
@@ -108,84 +120,165 @@ export default class Label extends React.Component {
         if (startSpan < start) {
           break;
         } else {
-          insertIdx += 1
+          insertIdx += 1;
         }
       }
       let newEntities = this.state.entities.slice(0, insertIdx);
       newEntities.push([this.state.selectedEntityCategory, startSpan, endSpan]);
-      this.state.entities.slice(insertIdx).forEach(item => newEntities.push(item));
+      this.state.entities
+        .slice(insertIdx)
+        .forEach((item) => newEntities.push(item));
       this.setState({
         entities: newEntities,
-        selectedEntityID: insertIdx
-      })
+        selectedEntityID: insertIdx,
+      });
     }
-  }
+  };
 
   genSpanList() {
     let entities = this.state.entities;
     let text = this.state.text;
-    let spanList = []
-
-    let prevStartSpan = 0
+    let spanList = [];
+    let prevStartSpan = 0;
     let startSpan;
     let endSpan;
     entities.forEach((element, id) => {
       startSpan = element[1];
       endSpan = element[2];
-      spanList.push([null, text.slice(prevStartSpan, startSpan), 'para']);
+      spanList.push([null, text.slice(prevStartSpan, startSpan), "para"]);
       spanList.push([id, text.slice(startSpan, endSpan), element[0]]);
       prevStartSpan = endSpan;
     });
-    spanList.push([null, text.slice(prevStartSpan), 'para'])
+    spanList.push([null, text.slice(prevStartSpan), "para"]);
 
     return spanList;
   }
 
   genAbstractJSX = (spanList) => {
+    const isChecked = this.state.checked;
     let JSXArray = spanList.map(([id, text, type]) => {
-      if (type == 'para') {
-        return text
+      if (type == "para" && isChecked) {
+        return text;
+      } else if (type == "para" && !isChecked) {
+        type += " relation";
+        return <span className={type}> {text} </span>;
       } else {
         if (id == this.state.selectedEntityID) {
-          type += ' selected'
+          type += " selected";
         }
-        return <Entity key={id} id={id} type={type} text={text} getEntityInfo={this.getEntityInfo}/>
+        if (!isChecked) {
+          type += " relation";
+        }
+        return (
+          <Entity
+            ref={this.entityRef}
+            key={id}
+            id={id}
+            type={type}
+            text={text}
+            getEntityInfo={this.getEntityInfo}
+          />
+        );
       }
     });
-    return <p className="abstract" onMouseUp={this.createNewEntity}>{ JSXArray }</p>
-  }
+    return (
+      <p
+        className={isChecked ? "abstract" : "abstract relation"}
+        onMouseUp={this.createNewEntity}
+      >
+        {JSXArray}
+      </p>
+    );
+  };
+
+  genEntityDims = () => {
+     let elements = document.getElementsByClassName("entity");
+     console.log(elements);
+     
+     var arr =  Array.prototype.map.call(elements, element =>
+         element.getBoundingClientRect())
+     console.log(arr
+     );
+    // Array.from(elements).forEach((element) => {
+    //   console.log(elements[element].getBoundingClientRect());
+    // });
+  };
+
+  changeChecked = () => {
+    this.setState({ checked: !this.state.checked });
+  };
 
   renderMenu() {
-    if (this.state.menuType === 'label') return <LabelMenu getRadioInfo={this.getRadioInfo}/>;
-    return <RelationshipMenu/>;  
+    const isChecked = this.state.checked;
+    if (isChecked) {
+      return <LabelMenu getRadioInfo={this.getRadioInfo} />;
+    }
+    return <RelationshipMenu />;
   }
 
+  renderCanvas = () => {
+    const isChecked = this.state.checked;
+    if (!isChecked) {
+      return <RelationCanvas />;
+    }
+  };
+
   render() {
-    const { error, isLoaded, title, doi, text, entities } = this.state;
+    const {
+      error,
+      isLoaded,
+      title,
+      doi,
+      text,
+      entities,
+      togname,
+      id,
+      small,
+      disabled,
+      checked,
+      optionlabels,
+    } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
+      this.genEntityDims(); 
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
             <div className="row">
-              <div className="col-sm-1">
-              </div>
+              <div className="col-sm-1"></div>
               <div className="col-md-10 sci-text">
-                <h4 className="title"><b>{title}</b></h4>
-                <p className="doi"><em>doi:{doi}</em></p>
-                {abstractJSX}
+                <h4 className="title">
+                  <b>{title}</b>
+                </h4>
+                <p
+                  ref={this.mySciTextRef}
+                  className="doi"
+                  onLoadedData={this.getSciTextDims}
+                >
+                  <em>doi:{doi}</em>
+                </p>
+                <RelationCanvas text={abstractJSX} />
+                <Toggle
+                  togname={togname}
+                  id={id}
+                  small={small}
+                  disabled={disabled}
+                  checked={checked}
+                  onChange={this.changeChecked}
+                  optionlabels={optionlabels}
+                />
               </div>
-              <div className="col-sm-1">
-              </div>
+              <div className="col-sm-1"></div>
             </div>
-	    { this.renderMenu() } 
+            {this.renderMenu()};
           </div>
         </div>
       );
     }
   }
 }
+
