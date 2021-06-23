@@ -244,7 +244,6 @@ export default class Label extends React.Component {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
-      this.genEntityDims(); 
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
@@ -281,4 +280,3 @@ export default class Label extends React.Component {
     }
   }
 }
-
