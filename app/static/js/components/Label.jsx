@@ -158,9 +158,9 @@ export default class Label extends React.Component {
     const isChecked = this.state.checked;
     let JSXArray = spanList.map(([id, text, type]) => {
       if (type == "para" && isChecked) {
-        return text;
+        return text
       } else if (type == "para" && !isChecked) {
-        type += " relation";
+        type = "text relation";
         return <span className={type}> {text} </span>;
       } else {
         if (id == this.state.selectedEntityID) {
@@ -192,13 +192,13 @@ export default class Label extends React.Component {
   };
 
   genEntityDims = () => {
-     let elements = document.getElementsByClassName("entity");
-     console.log(elements);
-     var arr = Array.prototype.map.call(elements, (element) =>
-       element.getBoundingClientRect()
-     );
-     console.log(arr);
-    //this.setState({ entityDims: arr });
+    let elements = document.getElementsByClassName("entity");
+    console.log(elements);
+    var arr = Array.prototype.map.call(elements, (element) =>
+      element.getBoundingClientRect()
+    );
+    console.log(arr);
+    this.setState({ entityDims: arr });
     // Array.from(elements).forEach((element) => {
     //   console.log(elements[element].getBoundingClientRect());
     // });
@@ -206,14 +206,22 @@ export default class Label extends React.Component {
 
   changeChecked = () => {
     this.setState({ checked: !this.state.checked });
+    let elements = document.getElementsByClassName("entity");
+    console.log(elements);
+    var arr = Array.prototype.map.call(elements, (element) =>
+      element.getBoundingClientRect()
+    );
+    console.log(arr);
+    this.setState({ entityDims: arr });
   };
 
   renderMenu() {
     let isChecked = this.state.checked;
     if (isChecked) {
       return <LabelMenu getRadioInfo={this.getRadioInfo} />;
+    } else {
+      return <RelationshipMenu />;
     }
-    return <RelationshipMenu />;
   }
 
   renderCanvas = () => {
@@ -244,7 +252,6 @@ export default class Label extends React.Component {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
-      this.genEntityDims();
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
@@ -261,15 +268,9 @@ export default class Label extends React.Component {
                 >
                   <em>doi:{doi}</em>
                 </p>
-                <RelationCanvas text={abstractJSX}/> 
-              </div>
-              <div className="col-sm-1"></div>
-            </div>
-            <div className='row toggle'>
-              <div className='col-sm-1'></div>
-              <div className='col-md-10'>
+                <RelationCanvas text={abstractJSX} />
                 <Toggle
-                 togname={togname}
+                  togname={togname}
                   id={id}
                   small={small}
                   disabled={disabled}
@@ -278,7 +279,7 @@ export default class Label extends React.Component {
                   optionlabels={optionlabels}
                 />
               </div>
-              <div className='col-sm-1'></div>
+              <div className="col-sm-1"></div>
             </div>
             {this.renderMenu()};
           </div>

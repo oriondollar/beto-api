@@ -45,8 +45,13 @@
   margin-left: 150px;
 }
 
-.abstract:hover:not(.para.relation) {
+.para:hover, .entity:hover {
   cursor: pointer;
+}
+
+.text.relation {
+  color: grey;
+  opacity: 0.4; 
 }
 
 .entity {
