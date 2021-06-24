@@ -45,7 +45,7 @@
   margin-left: 150px;
 }
 
-.para:hover, .entity:hover {
+.abstract:not(.relation):hover {
   cursor: pointer;
 }
 
@@ -70,8 +70,9 @@
   font-weight: "bold";
 }
 
-.text.relation {
+.para.relation {
   color: grey;
+  opacity: 0.4;
 }
 
 .interactive-menu {
@@ -94,7 +95,7 @@
 }
 
 .toggle {
-  padding-top: 10em;
+  padding-top: 100px;
 }
 
 .mol, .res {

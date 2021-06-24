@@ -19,13 +19,13 @@ export default class Label extends React.Component {
       selectedEntityCategory: "entity cpt",
       id: "annotation-mode",
       togname: "test",
-      checked: true,
+      checked: false,
       small: false,
       disabled: false,
       optionlabels: ["Label", "Link"],
       entityDims: [],
+      abstractDim: [],
     };
-    this.entityRef = React.createRef();
   }
 
   componentDidMount() {
@@ -158,9 +158,9 @@ export default class Label extends React.Component {
     const isChecked = this.state.checked;
     let JSXArray = spanList.map(([id, text, type]) => {
       if (type == "para" && isChecked) {
-        return text
+        return text;
       } else if (type == "para" && !isChecked) {
-        type = "text relation";
+        type += " relation";
         return <span className={type}> {text} </span>;
       } else {
         if (id == this.state.selectedEntityID) {
@@ -191,37 +191,31 @@ export default class Label extends React.Component {
     );
   };
 
-  genEntityDims = () => {
+  handleToggle = () => {
     let elements = document.getElementsByClassName("entity");
+    let abstract = document.getElementsByClassName("abstract");
     console.log(elements);
     var arr = Array.prototype.map.call(elements, (element) =>
       element.getBoundingClientRect()
     );
-    console.log(arr);
-    this.setState({ entityDims: arr });
-    // Array.from(elements).forEach((element) => {
-    //   console.log(elements[element].getBoundingClientRect());
-    // });
-  };
-
-  changeChecked = () => {
-    this.setState({ checked: !this.state.checked });
-    let elements = document.getElementsByClassName("entity");
-    console.log(elements);
-    var arr = Array.prototype.map.call(elements, (element) =>
-      element.getBoundingClientRect()
+    var abstractDim = Array.prototype.map.call(abstract, (ab) =>
+      ab.getBoundingClientRect()
     );
     console.log(arr);
-    this.setState({ entityDims: arr });
+    console.log(abstractDim);
+    this.setState({
+      checked: !this.state.checked,
+      entityDims: arr,
+      abstractDim: abstractDim,
+    });
   };
 
   renderMenu() {
-    let isChecked = this.state.checked;
+    const isChecked = this.state.checked;
     if (isChecked) {
       return <LabelMenu getRadioInfo={this.getRadioInfo} />;
-    } else {
-      return <RelationshipMenu />;
     }
+    return <RelationshipMenu />;
   }
 
   renderCanvas = () => {
@@ -262,20 +256,18 @@ export default class Label extends React.Component {
                   <b>{title}</b>
                 </h4>
                 <p
-                  ref={this.mySciTextRef}
                   className="doi"
-                  onLoadedData={this.getSciTextDims}
                 >
                   <em>doi:{doi}</em>
                 </p>
-                <RelationCanvas text={abstractJSX} />
+                {abstractJSX}
                 <Toggle
                   togname={togname}
                   id={id}
                   small={small}
                   disabled={disabled}
                   checked={checked}
-                  onChange={this.changeChecked}
+                  onChange={this.handleToggle}
                   optionlabels={optionlabels}
                 />
               </div>
