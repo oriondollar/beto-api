@@ -87,6 +87,10 @@
   margin-left: 5px;
 }
 
+.konvajs-content {
+  margin: 0 0 10px;
+}
+
 .category {
   border-radius: 5px;
   color: #d7d1b9;
