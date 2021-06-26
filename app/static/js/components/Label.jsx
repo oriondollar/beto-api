@@ -19,7 +19,7 @@ export default class Label extends React.Component {
       selectedEntityCategory: "entity cpt",
       id: "annotation-mode",
       togname: "test",
-      checked: false,
+      checked: true,
       small: false,
       disabled: false,
       optionlabels: ["Label", "Link"],
@@ -198,10 +198,16 @@ export default class Label extends React.Component {
     var arr = Array.prototype.map.call(elements, (element) =>
       element.getBoundingClientRect()
     );
-    var abstractDim = Array.prototype.map.call(abstract, (ab) =>
+    let abstractDim = Array.prototype.map.call(abstract, (ab) =>
       ab.getBoundingClientRect()
     );
-    console.log(arr);
+    (abstractDim = {
+      offsetX: abstractDim[0].x,
+      offsetY: abstractDim[0].y,
+      height: abstractDim[0].height,
+      width: abstractDim[0].width,
+    }),
+      console.log(arr);
     console.log(abstractDim);
     this.setState({
       checked: !this.state.checked,
@@ -218,10 +224,15 @@ export default class Label extends React.Component {
     return <RelationshipMenu />;
   }
 
-  renderCanvas = () => {
-    const isChecked = this.state.checked;
-    if (!isChecked) {
-      return <RelationCanvas />;
+  renderCanvas = (text) => {
+    const { checked, abstractDim } = this.state;
+    console.log(checked);
+    console.log(abstractDim);
+    if (!checked) {
+      return <RelationCanvas text={text} abDim={abstractDim} />;
+    }
+    else {
+      return text
     }
   };
 
@@ -239,6 +250,7 @@ export default class Label extends React.Component {
       disabled,
       checked,
       optionlabels,
+      abstractDim,
     } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -255,12 +267,11 @@ export default class Label extends React.Component {
                 <h4 className="title">
                   <b>{title}</b>
                 </h4>
-                <p
-                  className="doi"
-                >
+                <p className="doi">
                   <em>doi:{doi}</em>
                 </p>
-                {abstractJSX}
+                {this.renderCanvas(abstractJSX)}
+                {/* // <RelationCanvas abDim={abstractDim} text={abstractJSX} /> */}
                 <Toggle
                   togname={togname}
                   id={id}
