@@ -4,6 +4,8 @@ import LabelMenu from "./LabelMenu";
 import RelationshipMenu from "./RelationshipMenu";
 import RelationCanvas from "./RelationCanvas";
 import Toggle from "./Toggle";
+import { Html } from "react-konva-utils";
+import { Stage, Layer } from "react-konva";
 
 export default class Label extends React.Component {
   constructor(props) {
@@ -25,6 +27,16 @@ export default class Label extends React.Component {
       optionlabels: ["Label", "Link"],
       entityDims: [],
       abstractDim: [],
+      selectedReCategory: "re prod",
+      connectors: [
+        {
+          from: 0,
+          to: 6,
+          type: "re prod",
+          id: 0,
+        },
+      ],
+      fromEntityId: null,
     };
   }
 
@@ -56,6 +68,7 @@ export default class Label extends React.Component {
   }
 
   getEntityInfo = (id, category) => {
+    console.log("getEntityInfo", id, category);
     this.setState({
       selectedEntityID: id,
       selectedEntityCategory: category,
@@ -63,14 +76,19 @@ export default class Label extends React.Component {
   };
 
   getRadioInfo = (value) => {
-    let entities = this.state.entities;
-    if (this.state.selectedEntityID !== null) {
-      entities[this.state.selectedEntityID][0] = value;
+    const isChecked = this.state.checked;
+    if (isChecked) {
+      let entities = this.state.entities;
+      if (this.state.selectedEntityID !== null) {
+        entities[this.state.selectedEntityID][0] = value;
+      }
+      this.setState({
+        entities: entities,
+        selectedEntityCategory: value,
+      });
+    } else {
+      this.setState({ selectedReCategory: value });
     }
-    this.setState({
-      entities: entities,
-      selectedEntityCategory: value,
-    });
   };
 
   handleKeyDown = (e) => {
@@ -133,6 +151,7 @@ export default class Label extends React.Component {
         selectedEntityID: insertIdx,
       });
     }
+    console.log(this.state.entities);
   };
 
   genSpanList() {
@@ -154,6 +173,31 @@ export default class Label extends React.Component {
     return spanList;
   }
 
+  createNewConnector = () => {
+    let { connectors, fromEntityId, selectedReCategory, selectedEntityID } =
+      this.state;
+    if (fromEntityId) {
+      let newConnector = {
+        id: connectors.length,
+        from: fromEntityId,
+        to: selectedEntityID,
+        type: selectedReCategory,
+      };
+      console.log("new connector", newConnector);
+      console.log("current connectors", connectors);
+      this.setState({ connectors: connectors.concat([newConnector]) });
+      this.setState({ fromEntityId: null });
+    } else {
+      this.setState({ fromEntityId: selectedEntityID });
+    }
+  };
+
+  genConnectors = () => {
+    var connectors = this.state.connectors;
+    console.log("in genConnectors", connectors);
+    return connectors;
+  };
+
   genAbstractJSX = (spanList) => {
     const isChecked = this.state.checked;
     let JSXArray = spanList.map(([id, text, type]) => {
@@ -171,7 +215,6 @@ export default class Label extends React.Component {
         }
         return (
           <Entity
-            ref={this.entityRef}
             key={id}
             id={id}
             type={type}
@@ -184,7 +227,7 @@ export default class Label extends React.Component {
     return (
       <p
         className={isChecked ? "abstract" : "abstract relation"}
-        onMouseUp={this.createNewEntity}
+        onMouseUp={isChecked ? this.createNewEntity : this.createNewConnector}
       >
         {JSXArray}
       </p>
@@ -195,7 +238,7 @@ export default class Label extends React.Component {
     let elements = document.getElementsByClassName("entity");
     let abstract = document.getElementsByClassName("abstract");
     console.log(elements);
-    var arr = Array.prototype.map.call(elements, (element) =>
+    var entityDims = Array.prototype.map.call(elements, (element) =>
       element.getBoundingClientRect()
     );
     let abstractDim = Array.prototype.map.call(abstract, (ab) =>
@@ -207,13 +250,11 @@ export default class Label extends React.Component {
       height: abstractDim[0].height,
       width: abstractDim[0].width,
     }),
-      console.log(arr);
-    console.log(abstractDim);
-    this.setState({
-      checked: !this.state.checked,
-      entityDims: arr,
-      abstractDim: abstractDim,
-    });
+      this.setState({
+        checked: !this.state.checked,
+        entityDims: entityDims,
+        abstractDim: abstractDim,
+      });
   };
 
   renderMenu() {
@@ -221,18 +262,22 @@ export default class Label extends React.Component {
     if (isChecked) {
       return <LabelMenu getRadioInfo={this.getRadioInfo} />;
     }
-    return <RelationshipMenu />;
+    return <RelationshipMenu getRadioInfo={this.getRadioInfo} />;
   }
 
-  renderCanvas = (text) => {
-    const { checked, abstractDim } = this.state;
-    console.log(checked);
-    console.log(abstractDim);
+  renderCanvas = (text, connectors) => {
+    const { checked, abstractDim, entityDims } = this.state;
     if (!checked) {
-      return <RelationCanvas text={text} abDim={abstractDim} />;
-    }
-    else {
-      return text
+      return (
+        <RelationCanvas
+          text={text}
+          abDim={abstractDim}
+          connectors={connectors}
+          entityDims={entityDims}
+        />
+      );
+    } else {
+      return text;
     }
   };
 
@@ -250,7 +295,6 @@ export default class Label extends React.Component {
       disabled,
       checked,
       optionlabels,
-      abstractDim,
     } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -258,6 +302,7 @@ export default class Label extends React.Component {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
+      let connectors = this.genConnectors();
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
@@ -270,8 +315,7 @@ export default class Label extends React.Component {
                 <p className="doi">
                   <em>doi:{doi}</em>
                 </p>
-                {this.renderCanvas(abstractJSX)}
-                {/* // <RelationCanvas abDim={abstractDim} text={abstractJSX} /> */}
+                {this.renderCanvas(abstractJSX, connectors)}
                 <Toggle
                   togname={togname}
                   id={id}
