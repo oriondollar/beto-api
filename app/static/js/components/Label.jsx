@@ -26,14 +26,7 @@ export default class Label extends React.Component {
       entityDims: [],
       abstractDim: [],
       selectedReCategory: "re prod",
-      connectors: [
-        //        {
-        //        from: 0,
-        //      to: 1,
-        //    type: "re prod",
-        //  id: 0,
-        // },
-      ],
+      connectors: [],
       fromEntityId: null,
     };
   }
@@ -66,7 +59,6 @@ export default class Label extends React.Component {
   }
 
   getEntityInfo = (id, category) => {
-    console.log("getEntityInfo", id, category);
     this.setState({
       selectedEntityID: id,
       selectedEntityCategory: category,
@@ -174,8 +166,6 @@ export default class Label extends React.Component {
   createNewConnector = () => {
     let { connectors, fromEntityId, selectedEntityID, reCategory } = this.state;
     if (fromEntityId) {
-      let add = true;
-      console.log("making new connection. prev connectors:", connectors);
       let newConnector = {
         id: connectors.length,
         from: fromEntityId,
@@ -187,19 +177,11 @@ export default class Label extends React.Component {
         fromEntityId: null,
       });
     } else {
-      console.log("first entity selected");
       this.setState({
         fromEntityId: selectedEntityID,
         reCategory: this.state.selectedReCategory,
       });
     }
-  };
-
-  genConnectors = () => {
-    var connectors = this.state.connectors;
-    console.log("in genConnectors", connectors);
-    console.log("entitydims are", this.state.entityDims);
-    return connectors;
   };
 
   genAbstractJSX = (spanList) => {
@@ -257,6 +239,7 @@ export default class Label extends React.Component {
         checked: !this.state.checked,
         entityDims: entityDims,
         abstractDim: abstractDim,
+        selectedEntityID: null, 
       });
   };
 
@@ -290,14 +273,13 @@ export default class Label extends React.Component {
       isLoaded,
       title,
       doi,
-      text,
-      entities,
       togname,
       id,
       small,
       disabled,
       checked,
       optionlabels,
+      connectors,
     } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -305,7 +287,6 @@ export default class Label extends React.Component {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
-      let connectors = this.genConnectors();
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
