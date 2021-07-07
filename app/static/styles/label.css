@@ -38,6 +38,7 @@
 
 .abstract {
   font-size: 1.25vw;
+  line-height: 1.75em;
 }
 
 .menu {
@@ -45,13 +46,13 @@
   margin-left: 150px;
 }
 
-.abstract:not(.relation):hover {
+.abstract:hover:not(.para.relation) {
   cursor: pointer;
 }
 
-.text.relation {
+.para.relation {
   color: grey;
-  opacity: 0.4; 
+  opacity: 0.5;
 }
 
 .entity {
@@ -70,9 +71,8 @@
   font-weight: "bold";
 }
 
-.para.relation {
+.text.relation {
   color: grey;
-  opacity: 0.4;
 }
 
 .interactive-menu {
@@ -87,7 +87,7 @@
   margin-left: 5px;
 }
 
-.konvajs-content {
+.canvas.abstract {
   margin: 0 0 10px;
 }
 
@@ -98,36 +98,71 @@
   margin-left: 5px;
 }
 
-.toggle {
-  padding-top: 100px;
-}
-
-.mol, .res {
+.mol {
   background-color: #e56b6f;
+  white-space: nowrap;
 }
 
-.cpt, .prod {
+.cpt {
   background-color: #2a9d8f;
+  white-space: nowrap;
 }
 
-.pro, .infl {
+.pro {
   background-color: #264653;
+  white-space: nowrap;
 }
 
-.cmt, .char, .exam {
+.cmt {
   background-color: #e76f51;
+  white-space: nowrap;
 }
 
-.smt, .feat {
+.smt {
   background-color: #00296b;
+  white-space: nowrap;
 }
 
-.equip, .use {
+.equip {
   background-color: #f94144;
+  white-space: nowrap;
 }
 
-.dsc, .syn {
+.dsc {
   background-color: #3a5a40;
+  white-space: nowrap;
+}
+
+.res {
+  background-color: #cc6677;
+}
+
+.prod {
+  background-color: #332288;
+}
+
+.infl {
+  background-color: #aa4499;
+}
+
+.char {
+  background-color: #117733;
+}
+
+.feat {
+  background-color: #882255;
+}
+
+.use {
+  background-color: #004488;
+}
+
+.syn {
+  background-color: #999933;
+}
+
+.exam {
+  background-color: #997700;
 }
 
 .submit-labels {
@@ -135,7 +170,6 @@
 }
 
 #row canv {
-  
 }
 #relevance_column {
   float: left;

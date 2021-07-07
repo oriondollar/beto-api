@@ -4,8 +4,6 @@ import LabelMenu from "./LabelMenu";
 import RelationshipMenu from "./RelationshipMenu";
 import RelationCanvas from "./RelationCanvas";
 import Toggle from "./Toggle";
-import { Html } from "react-konva-utils";
-import { Stage, Layer } from "react-konva";
 
 export default class Label extends React.Component {
   constructor(props) {
@@ -29,12 +27,12 @@ export default class Label extends React.Component {
       abstractDim: [],
       selectedReCategory: "re prod",
       connectors: [
-        {
-          from: 0,
-          to: 6,
-          type: "re prod",
-          id: 0,
-        },
+        //        {
+        //        from: 0,
+        //      to: 1,
+        //    type: "re prod",
+        //  id: 0,
+        // },
       ],
       fromEntityId: null,
     };
@@ -174,27 +172,33 @@ export default class Label extends React.Component {
   }
 
   createNewConnector = () => {
-    let { connectors, fromEntityId, selectedReCategory, selectedEntityID } =
-      this.state;
+    let { connectors, fromEntityId, selectedEntityID, reCategory } = this.state;
     if (fromEntityId) {
+      let add = true;
+      console.log("making new connection. prev connectors:", connectors);
       let newConnector = {
         id: connectors.length,
         from: fromEntityId,
         to: selectedEntityID,
-        type: selectedReCategory,
+        type: reCategory,
       };
-      console.log("new connector", newConnector);
-      console.log("current connectors", connectors);
-      this.setState({ connectors: connectors.concat([newConnector]) });
-      this.setState({ fromEntityId: null });
+      this.setState({
+        connectors: connectors.concat([newConnector]),
+        fromEntityId: null,
+      });
     } else {
-      this.setState({ fromEntityId: selectedEntityID });
+      console.log("first entity selected");
+      this.setState({
+        fromEntityId: selectedEntityID,
+        reCategory: this.state.selectedReCategory,
+      });
     }
   };
 
   genConnectors = () => {
     var connectors = this.state.connectors;
     console.log("in genConnectors", connectors);
+    console.log("entitydims are", this.state.entityDims);
     return connectors;
   };
 
@@ -205,7 +209,7 @@ export default class Label extends React.Component {
         return text;
       } else if (type == "para" && !isChecked) {
         type += " relation";
-        return <span className={type}> {text} </span>;
+        return <text className={type}>{text}</text>;
       } else {
         if (id == this.state.selectedEntityID) {
           type += " selected";
@@ -237,7 +241,6 @@ export default class Label extends React.Component {
   handleToggle = () => {
     let elements = document.getElementsByClassName("entity");
     let abstract = document.getElementsByClassName("abstract");
-    console.log(elements);
     var entityDims = Array.prototype.map.call(elements, (element) =>
       element.getBoundingClientRect()
     );
