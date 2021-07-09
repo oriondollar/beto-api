@@ -17,17 +17,13 @@ export default class Label extends React.Component {
       entities: null,
       selectedEntityID: null,
       selectedEntityCategory: "entity cpt",
-      id: "annotation-mode",
-      togname: "test",
       checked: true,
-      small: false,
-      disabled: false,
-      optionlabels: ["Label", "Link"],
       entityDims: [],
       abstractDim: [],
       selectedReCategory: "re prod",
       connectors: [],
       fromEntityId: null,
+      hasFromEntityId: false,
     };
   }
 
@@ -58,7 +54,7 @@ export default class Label extends React.Component {
       );
   }
 
-  getEntityInfo = (id, category) => {
+  setEntityInfo = (id, category) => {
     this.setState({
       selectedEntityID: id,
       selectedEntityCategory: category,
@@ -78,6 +74,11 @@ export default class Label extends React.Component {
       });
     } else {
       this.setState({ selectedReCategory: value });
+      let connectors = this.state.connectors;
+      if (connectors.length > 0) {
+        connectors[connectors.length - 1]["type"] = value;
+        this.setState({ connectors: connectors });
+      }
     }
   };
 
@@ -114,6 +115,7 @@ export default class Label extends React.Component {
   };
 
   createNewEntity = (e) => {
+    console.log("createNewEntity");
     const isChecked = this.state.checked;
     if (e.target.tagName != "SPAN" && isChecked) {
       const selectionObj = window.getSelection && window.getSelection();
@@ -141,12 +143,51 @@ export default class Label extends React.Component {
         selectedEntityID: insertIdx,
       });
     }
-    console.log(this.state.entities);
+  };
+
+  createRel = (id) => {
+    const { hasFromEntityId, fromEntityId, connectors, selectedReCategory } =
+      this.state;
+    if (!hasFromEntityId) {
+      this.setState({
+        fromEntityId: id,
+        hasFromEntityId: true,
+      });
+    }
+    if (hasFromEntityId) {
+      let connectorMatch = connectors.filter(
+        (c) =>
+          c.from == fromEntityId && c.to == id && c.type == selectedReCategory
+      );
+      if (connectorMatch.length > 0) {
+        let filtConnectors = [...connectors];
+        let idx = connectors.findIndex(
+          (c) =>
+            c.from == fromEntityId && c.to == id && c.type == selectedReCategory
+        );
+        filtConnectors.splice(idx, 1);
+        this.setState({ connectors: filtConnectors });
+      } else {
+        let newConnector = {
+          id: connectors.length,
+          from: fromEntityId,
+          to: id,
+          type: selectedReCategory,
+        };
+        this.setState({
+          connectors: connectors.concat([newConnector]),
+        });
+      }
+      this.setState({
+        hasFromEntityId: false,
+        hasToEntityId: false,
+        fromEntityId: null,
+      });
+    }
   };
 
   genSpanList() {
-    let entities = this.state.entities;
-    let text = this.state.text;
+    let { entities, text } = this.state; 
     let spanList = [];
     let prevStartSpan = 0;
     let startSpan;
@@ -159,30 +200,8 @@ export default class Label extends React.Component {
       prevStartSpan = endSpan;
     });
     spanList.push([null, text.slice(prevStartSpan), "para"]);
-
     return spanList;
   }
-
-  createNewConnector = () => {
-    let { connectors, fromEntityId, selectedEntityID, reCategory } = this.state;
-    if (fromEntityId) {
-      let newConnector = {
-        id: connectors.length,
-        from: fromEntityId,
-        to: selectedEntityID,
-        type: reCategory,
-      };
-      this.setState({
-        connectors: connectors.concat([newConnector]),
-        fromEntityId: null,
-      });
-    } else {
-      this.setState({
-        fromEntityId: selectedEntityID,
-        reCategory: this.state.selectedReCategory,
-      });
-    }
-  };
 
   genAbstractJSX = (spanList) => {
     const isChecked = this.state.checked;
@@ -205,7 +224,7 @@ export default class Label extends React.Component {
             id={id}
             type={type}
             text={text}
-            getEntityInfo={this.getEntityInfo}
+            setEntityInfo={isChecked ? this.setEntityInfo : this.createRel}
           />
         );
       }
@@ -213,7 +232,7 @@ export default class Label extends React.Component {
     return (
       <p
         className={isChecked ? "abstract" : "abstract relation"}
-        onMouseUp={isChecked ? this.createNewEntity : this.createNewConnector}
+        onMouseUp={isChecked ? this.createNewEntity : null}
       >
         {JSXArray}
       </p>
@@ -239,7 +258,8 @@ export default class Label extends React.Component {
         checked: !this.state.checked,
         entityDims: entityDims,
         abstractDim: abstractDim,
-        selectedEntityID: null, 
+        hasFromEntityId: false,
+        hasToEntityId: false,
       });
   };
 
@@ -268,25 +288,14 @@ export default class Label extends React.Component {
   };
 
   render() {
-    const {
-      error,
-      isLoaded,
-      title,
-      doi,
-      togname,
-      id,
-      small,
-      disabled,
-      checked,
-      optionlabels,
-      connectors,
-    } = this.state;
+    const { error, isLoaded, title, doi, checked } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
+      let connectors = this.state.connectors;
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
@@ -301,13 +310,13 @@ export default class Label extends React.Component {
                 </p>
                 {this.renderCanvas(abstractJSX, connectors)}
                 <Toggle
-                  togname={togname}
-                  id={id}
-                  small={small}
-                  disabled={disabled}
+                  togname="mode-switcher"
+                  id="toggle"
+                  small={false}
+                  disabled={false}
                   checked={checked}
                   onChange={this.handleToggle}
-                  optionlabels={optionlabels}
+                  optionlabels={["Label", "Link"]}
                 />
               </div>
               <div className="col-sm-1"></div>
