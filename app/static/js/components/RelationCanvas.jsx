@@ -7,11 +7,11 @@ class RelationCanvas extends Component {
     super(props);
     this.state = {
       stroke: 3,
-      dashDim: [7, 7],
       cornerRadius: 4,
       pointerWidth: 4,
       pointerLength: 2,
       tolFactor: 0.01,
+      opacity: 0.8,
     };
   }
   calcPoints = (fromEntId, toEntId) => {
@@ -92,10 +92,10 @@ class RelationCanvas extends Component {
           stroke={this.getColor(c.type)}
           fill={this.getColor(c.type)}
           strokeWidth={this.state.strokeWidth}
-          pointerWidth={4}
-          pointerLength={2}
+          pointerWidth={this.state.pointerWidth}
+          pointerLength={this.state.pointerLength}
           tension={0.01}
-          opacity={0.8}
+          opacity={this.state.opacity}
         />
       );
     });
@@ -117,7 +117,6 @@ class RelationCanvas extends Component {
           key={"inline " + id}
           stroke={this.getColor(type)}
           strokeWidth={this.state.strokeWidth}
-          //dash={this.state.dashDim}
           x={firstEnt.x}
           y={firstEnt.y}
           width={rectWidth}
@@ -159,7 +158,6 @@ class RelationCanvas extends Component {
             key={"first " + id}
             stroke={this.getColor(type)}
             strokeWidth={this.state.strokeWidth}
-            //dash={this.state.dashDim}
             x={firstEnt.x}
             y={firstEnt.y}
             width={widthOne}
@@ -173,7 +171,6 @@ class RelationCanvas extends Component {
             key={"second " + id}
             stroke={this.getColor(type)}
             strokeWidth={this.state.strokeWidth}
-            //dash={this.state.dashDim}
             x={breakEnt.x}
             y={breakEnt.y}
             width={widthTwo}
@@ -220,8 +217,7 @@ class RelationCanvas extends Component {
           pointerWidth={this.state.pointerWidth}
           pointerLength={this.state.pointerLength}
           tension={0.01}
-          opacity={0.5}
-          dash={this.state.dashDim}
+          opacity={this.state.opacity}
         />
       );
     });

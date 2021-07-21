@@ -157,6 +157,7 @@ export default class Label extends React.Component {
           type: this.state.selectedReCategory,
         };
         this.setState({
+          multiEntity: false,
           hasFromSet: false,
           multiEntityConnectors: this.state.multiEntityConnectors.concat([
             newConnector,
