@@ -16,7 +16,7 @@ export default class Label extends React.Component {
       text: null,
       entities: null,
       selectedEntityID: null,
-      selectedEntityCategory: "entity cpt",
+      selectedEntityCategory: "entity chem",
       checked: true,
       entityDims: [],
       abstractDim: [],
@@ -24,6 +24,24 @@ export default class Label extends React.Component {
       connectors: [],
       fromEntityId: null,
       hasFromEntityId: false,
+      multiEntity: false,
+      entitySet: [],
+      fromSet: [],
+      hasFromSet: false,
+      multiEntityConnectors: [
+        {
+          id: 0,
+          from: [0, 1],
+          to: [2, 3],
+          type: "re prod",
+        },
+        {
+          id: 1,
+          from: [4, 5],
+          to: [6, 7],
+          type: "re char",
+        },
+      ],
     };
   }
 
@@ -83,7 +101,7 @@ export default class Label extends React.Component {
   };
 
   handleKeyDown = (e) => {
-    if (this.state.selectedEntityID !== null) {
+    if (this.state.selectedEntityID !== null && this.state.checked) {
       if (e.keyCode === 37) {
         let newID = this.state.selectedEntityID - 1;
         if (newID < 0) {
@@ -109,13 +127,58 @@ export default class Label extends React.Component {
         });
       }
     }
+    if (!this.state.checked) {
+      if (e.keyCode === 8) {
+        if (!this.state.multiEntity) {
+          let newConnectors = [...this.state.connectors];
+          newConnectors.pop();
+          this.setState({ connectors: newConnectors });
+        } else {
+          let newMEConnectors = [...this.state.multiEntityConnectors];
+          newMEConnectors.pop();
+          this.setState({ multiEntityConnectors: newMEConnectors });
+        }
+      }
+      if (e.keyCode === 49) {
+        this.setState({ multiEntity: true });
+      }
+      if (e.keyCode === 50) {
+        this.setState({
+          hasFromSet: true,
+          fromSet: this.state.entitySet,
+          entitySet: [],
+        });
+      }
+      if (e.keyCode === 13) {
+        let newConnector = {
+          id: this.state.multiEntityConnectors.length,
+          from: this.state.fromSet,
+          to: this.state.entitySet,
+          type: this.state.selectedReCategory,
+        };
+        this.setState({
+          hasFromSet: false,
+          multiEntityConnectors: this.state.multiEntityConnectors.concat([
+            newConnector,
+          ]),
+        });
+      }
+      if (e.keyCode === 27) {
+        console.log(this.state.multiEntityConnectors);
+        this.setState({
+          multiEntity: false,
+          entitySet: [],
+          fromSet: [],
+          hasFromSet: false,
+        });
+      }
+    }
     if (e.keyCode === 38 || e.keyCode === 40) {
       e.preventDefault();
     }
   };
 
   createNewEntity = (e) => {
-    console.log("createNewEntity");
     const isChecked = this.state.checked;
     if (e.target.tagName != "SPAN" && isChecked) {
       const selectionObj = window.getSelection && window.getSelection();
@@ -146,48 +209,64 @@ export default class Label extends React.Component {
   };
 
   createRel = (id) => {
-    const { hasFromEntityId, fromEntityId, connectors, selectedReCategory } =
-      this.state;
-    if (!hasFromEntityId) {
-      this.setState({
-        fromEntityId: id,
-        hasFromEntityId: true,
-      });
-    }
-    if (hasFromEntityId) {
-      let connectorMatch = connectors.filter(
-        (c) =>
-          c.from == fromEntityId && c.to == id && c.type == selectedReCategory
-      );
-      if (connectorMatch.length > 0) {
-        let filtConnectors = [...connectors];
-        let idx = connectors.findIndex(
+    const {
+      hasFromEntityId,
+      fromEntityId,
+      connectors,
+      selectedReCategory,
+      multiEntity,
+      entitySet,
+    } = this.state;
+    this.setState({ selectedEntityID: id });
+    if (!multiEntity) {
+      if (!hasFromEntityId) {
+        this.setState({
+          fromEntityId: id,
+          hasFromEntityId: true,
+        });
+      }
+      if (hasFromEntityId) {
+        let connectorMatch = connectors.filter(
           (c) =>
             c.from == fromEntityId && c.to == id && c.type == selectedReCategory
         );
-        filtConnectors.splice(idx, 1);
-        this.setState({ connectors: filtConnectors });
-      } else {
-        let newConnector = {
-          id: connectors.length,
-          from: fromEntityId,
-          to: id,
-          type: selectedReCategory,
-        };
+        if (connectorMatch.length > 0) {
+          let filtConnectors = [...connectors];
+          let idx = connectors.findIndex(
+            (c) =>
+              c.from == fromEntityId &&
+              c.to == id &&
+              c.type == selectedReCategory
+          );
+          filtConnectors.splice(idx, 1);
+          this.setState({ connectors: filtConnectors });
+        } else {
+          let newConnector = {
+            id: connectors.length,
+            from: fromEntityId,
+            to: id,
+            type: selectedReCategory,
+          };
+          this.setState({
+            connectors: connectors.concat([newConnector]),
+          });
+        }
         this.setState({
-          connectors: connectors.concat([newConnector]),
+          hasFromEntityId: false,
+          hasToEntityId: false,
+          fromEntityId: null,
+          selectedEntityID: null,
         });
       }
-      this.setState({
-        hasFromEntityId: false,
-        hasToEntityId: false,
-        fromEntityId: null,
-      });
+    }
+    if (multiEntity) {
+      let newSet = [...entitySet].concat([id]);
+      this.setState({ entitySet: [...new Set(newSet)].sort() });
     }
   };
 
   genSpanList() {
-    let { entities, text } = this.state; 
+    let { entities, text } = this.state;
     let spanList = [];
     let prevStartSpan = 0;
     let startSpan;
@@ -210,7 +289,7 @@ export default class Label extends React.Component {
         return text;
       } else if (type == "para" && !isChecked) {
         type += " relation";
-        return <text className={type}>{text}</text>;
+        return <span className={type}>{text}</span>;
       } else {
         if (id == this.state.selectedEntityID) {
           type += " selected";
@@ -272,7 +351,8 @@ export default class Label extends React.Component {
   }
 
   renderCanvas = (text, connectors) => {
-    const { checked, abstractDim, entityDims } = this.state;
+    const { checked, abstractDim, entityDims, multiEntityConnectors } =
+      this.state;
     if (!checked) {
       return (
         <RelationCanvas
@@ -280,6 +360,7 @@ export default class Label extends React.Component {
           abDim={abstractDim}
           connectors={connectors}
           entityDims={entityDims}
+          multiEntityConnectors={multiEntityConnectors}
         />
       );
     } else {
@@ -289,13 +370,13 @@ export default class Label extends React.Component {
 
   render() {
     const { error, isLoaded, title, doi, checked } = this.state;
+    let { connectors, multiEntityConnectors } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
       let abstractJSX = this.genAbstractJSX(this.genSpanList());
-      let connectors = this.state.connectors;
       return (
         <div className="bgimg-1">
           <div id="parent" onKeyDown={this.handleKeyDown} tabIndex="0">
@@ -308,9 +389,14 @@ export default class Label extends React.Component {
                 <p className="doi">
                   <em>doi:{doi}</em>
                 </p>
-                {this.renderCanvas(abstractJSX, connectors)}
+                {this.renderCanvas(
+                  abstractJSX,
+                  connectors,
+                  multiEntityConnectors
+                )}
                 <Toggle
                   togname="mode-switcher"
+                  key="toggle"
                   id="toggle"
                   small={false}
                   disabled={false}

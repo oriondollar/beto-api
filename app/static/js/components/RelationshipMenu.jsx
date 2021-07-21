@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class RelationshipMenu extends Component {
   constructor(props) {
@@ -57,6 +57,19 @@ class RelationshipMenu extends Component {
     ],
   };
 
+  sendRadioChange = (e) => {
+    this.props.getRadioInfo(e.target.value);
+    this.setState({
+      selected: e.target.value,
+    });
+  };
+
+  sendRadioClick = (e) => {
+    if (this.state.selected == e.target.value) {
+      this.props.getRadioInfo(e.target.value);
+    }
+  };
+
   render() {
     return (
       <div className="row">
@@ -65,9 +78,9 @@ class RelationshipMenu extends Component {
           className="col-md-6 interactive-menu"
           onChange={this.sendRadioChange}
         >
-	<ul>
+          <ul>
             {this.state.radio.map((r) => (
-              <ul>
+              <ul key={r.id}>
                 <input
                   key={r.id}
                   type="radio"
@@ -79,10 +92,11 @@ class RelationshipMenu extends Component {
                 <label className={r.className}> {r.labelName}</label>
               </ul>
             ))}
-	</ul>
+          </ul>
         </div>
       </div>
     );
   }
 }
 export default RelationshipMenu;
+

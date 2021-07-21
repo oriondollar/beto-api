@@ -1,74 +1,127 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
 
-class LabelMenu extends React.Component {
-
+class LabelMenu extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selected: null,
-    }
   }
+  state = {
+    radio: [
+      {
+        id: "radchem",
+        value: "entity chem",
+        labelName: "Chemical",
+        className: "category chem",
+      },
+      {
+        id: "radcdsc",
+        value: "entity cdsc",
+        labelName: "Chemical Descriptor",
+        className: "category cdsc",
+      },
+      {
+        id: "radsmt",
+        value: "entity smt",
+        labelName: "Synthesis Method",
+        className: "category smt",
+      },
+      {
+        id: "radcmt",
+        value: "entity cmt",
+        labelName: "Characterization Method",
+        className: "category cmt",
+      },
+      {
+        id: "radcres",
+        value: "radcres",
+        labelName: "Characterization Result",
+        className: "category cres",
+      },
+      {
+        id: "radprop",
+        value: "entity prop",
+        labelName: "Property",
+        className: "category prop",
+      },
+      {
+        id: "radpdsc",
+        value: "entity pdsc",
+        labelName: "Property Descriptor",
+        className: "category pdsc",
+      },
+
+      {
+        id: "radmtrc",
+        value: "entity mtrc",
+        labelName: "Metric",
+        className: "category mtrc",
+      },
+      {
+        id: "radapp",
+        value: "entity app",
+        labelName: "Application Area",
+        className: "category app",
+      },
+      {
+        id: "radequip",
+        value: "entity equip",
+        labelName: "Experimental Equipment",
+        className: "category equip",
+      },
+    ],
+  };
 
   sendRadioChange = (e) => {
     this.props.getRadioInfo(e.target.value);
     this.setState({
-      selected: e.target.value
-    })
-  }
+      selected: e.target.value,
+    });
+  };
 
   sendRadioClick = (e) => {
     if (this.state.selected == e.target.value) {
-      this.props.getRadioInfo(e.target.value)
+      this.props.getRadioInfo(e.target.value);
     }
-  }
+  };
 
   render() {
     return (
       <div className="row">
-        <div className="col-md-1">
-        </div>
-        <div className="col-md-6 interactive-menu" onChange={this.sendRadioChange}>
-        <ul>
+        <div className="col-md-1"></div>
+        <div
+          className="col-md-6 interactive-menu"
+          onChange={this.sendRadioChange}
+        >
           <ul>
-            <input type="radio" id="radcpt" value="entity cpt" name="category" onClick={this.sendRadioClick}/>
-              <label htmlFor="radcpt" className="category cpt">Concept</label>
+            {this.state.radio.map((r) => (
+              <ul key={r.id}>
+                <input
+                  key={r.id}
+                  type="radio"
+                  id={r.id}
+                  value={r.value}
+                  name="category"
+                  onClick={this.sendRadioClick}
+                />
+                <label htmlFor={r.id} className={r.className}>
+                  {r.labelName}
+                </label>
+              </ul>
+            ))}
           </ul>
-          <ul>
-              <input type="radio" id="radmol" value="entity mol" name="category" onClick={this.sendRadioClick}/>
-                <label htmlFor="radmol" className="category mol">Molecule</label>
-          </ul>
-          <ul>
-              <input type="radio" id="radpro" value="entity pro" name="category" onClick={this.sendRadioClick}/>
-                <label htmlFor="radpro" className="category pro">Property</label>
-          </ul>
-          <ul>
-              <input type="radio" id="radcmt" value="entity cmt" name="category" onClick={this.sendRadioClick}/>
-                <label htmlFor="radcmt" className="category cmt">Characterization Method</label>
-          </ul>
-          <ul>
-              <input type="radio" id="radsmt" value="entity smt" name="category" onClick={this.sendRadioClick}/>
-                <label htmlFor="radsmt" className="category smt">Synthesis Method</label>
-          </ul>
-          <ul>
-              <input type="radio" id="radequip" value="entity equip" name="category" onClick={this.sendRadioClick}/>
-                <label htmlFor="radequip" className="category equip">Experimental Equipment</label>
-          </ul>
-          <ul>
-              <input type="radio" id="raddsc" value="entity dsc" name="category" onClick={this.sendRadioClick}/>
-                <label htmlFor="raddsc" className="category dsc">Descriptor</label>
-          </ul>
-        </ul>
         </div>
         <div className="col-md-4 submit-labels">
-          <a className="btn btn-primary apple-button" href="{{ url_for('home') }}" role="button">Submit Labels</a>
+          <a
+            className="btn btn-primary apple-button"
+            href="{{ url_for('home') }}"
+            role="button"
+          >
+            Submit Labels
+          </a>
         </div>
-        <div className="col-md-1">
-        </div>
+        <div className="col-md-1"></div>
       </div>
-    )
+    );
   }
-
 }
-
 export default LabelMenu;
+

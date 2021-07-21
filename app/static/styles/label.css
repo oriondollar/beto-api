@@ -71,12 +71,12 @@
   font-weight: "bold";
 }
 
-.selected.relation{
-  border-width: 2px;  
+.selected.relation {
+  border-width: 2px;
   border-style: dashed;
   border-color: white;
 }
- 
+
 .text.relation {
   color: grey;
 }
@@ -104,18 +104,18 @@
   margin-left: 5px;
 }
 
-.mol {
+.chem {
   background-color: #e56b6f;
   white-space: nowrap;
 }
 
-.cpt {
-  background-color: #2a9d8f;
+.cdsc {
+  background-color: #952b60;
   white-space: nowrap;
 }
 
-.pro {
-  background-color: #264653;
+.smt {
+  background-color: #f94144;
   white-space: nowrap;
 }
 
@@ -124,18 +124,38 @@
   white-space: nowrap;
 }
 
-.smt {
-  background-color: #00296b;
+.cres {
+  background-color: #264653;
+  white-space: nowrap;
+}
+
+.prop {
+  background-color:#95b750 ;
+  white-space: nowrap;
+}
+
+.pdsc {
+  background-color: #3a5a40;
+  white-space: nowrap;
+}
+
+.cmt {
+  background-color: #2a9d8f;
+  white-space: nowrap;
+}
+
+.mtrc {
+  background-color: #9b948a;
   white-space: nowrap;
 }
 
 .equip {
-  background-color: #f94144;
+  background-color: #00296b;
   white-space: nowrap;
 }
 
-.dsc {
-  background-color: #3a5a40;
+.app {
+  background-color: #7e9dc2;
   white-space: nowrap;
 }
 
@@ -563,19 +583,15 @@ div.form {
   text-align: center;
   transform: translate(10%, 50%);
 }
-
 .progress {
   width: 50%
 }
-
 #label-submit {
   font-size: 150%;
 }
-
 .label-container {
   margin-top: 25px;
 }
-
 #bar-label {
   width: 50%;
   text-align: center;
