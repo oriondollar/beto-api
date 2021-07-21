@@ -71,6 +71,12 @@
   font-weight: "bold";
 }
 
+.selected.relation{
+  border-width: 2px;  
+  border-style: dashed;
+  border-color: white;
+}
+ 
 .text.relation {
   color: grey;
 }
