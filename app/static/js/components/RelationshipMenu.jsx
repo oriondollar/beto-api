@@ -71,6 +71,7 @@ class RelationshipMenu extends Component {
   };
 
   render() {
+    const { handleSubmit, handleAnother, submitWarning } = this.props;
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -89,11 +90,29 @@ class RelationshipMenu extends Component {
                   name="relationship"
                   onClick={this.sendRadioClick}
                 />
-                <label className={r.className}> {r.labelName}</label>
+                <label className={r.className}>{r.labelName}</label>
               </ul>
             ))}
           </ul>
         </div>
+        <div className="col-md-4 submit-labels">
+          <a
+            className="btn btn-primary apple-button"
+            role="button"
+            onClick={handleSubmit}
+          >
+            Submit Relations
+          </a>
+          <a
+            className="btn btn-primary apple-button"
+            role="button"
+            onClick={handleAnother}
+          >
+            Gimme Another
+          </a>
+          <p id="submit-warning"> {submitWarning} </p>
+        </div>
+        <div className="col-md-1"></div>
       </div>
     );
   }

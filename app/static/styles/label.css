@@ -46,6 +46,15 @@
   margin-left: 150px;
 }
 
+.instructions {
+  margin-left: 200px;
+  margin-top: -200px;
+}
+
+.li {
+  text-align: center;
+}
+
 .abstract:hover:not(.para.relation) {
   cursor: pointer;
 }
@@ -130,7 +139,7 @@
 }
 
 .prop {
-  background-color:#95b750 ;
+  background-color: #95b750;
   white-space: nowrap;
 }
 
@@ -414,6 +423,21 @@ a.apple-button {
   border-radius: 10px;
   position: fixed;
   outline: none;
+}
+
+#submit-message {
+  color: red;
+  font-size: 1vw;
+  margin-top: 17vw;
+  margin-left: 7.5vw;
+  position: fixed;
+}
+
+#submit-warning {
+  color: red;
+  font-size: 1.7vw;
+  margin-top: 1vw;
+  margin-left: 4vw;
 }
 
 #relevance-submit-down {

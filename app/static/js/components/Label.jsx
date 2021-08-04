@@ -8,6 +8,9 @@ import Toggle from "./Toggle";
 export default class Label extends React.Component {
   constructor(props) {
     super(props);
+    this.handleSubmitEnts = this.handleSubmitEnts.bind(this);
+    this.handleSubmitRels = this.handleSubmitRels.bind(this);
+    this.handleAnother = this.handleAnother.bind(this);
     this.state = {
       error: null,
       isLoaded: false,
@@ -17,6 +20,7 @@ export default class Label extends React.Component {
       entities: null,
       selectedEntityID: null,
       selectedEntityCategory: "entity chem",
+      vrelDOIs: null,
       checked: true,
       entityDims: [],
       abstractDim: [],
@@ -24,44 +28,34 @@ export default class Label extends React.Component {
       connectors: [],
       fromEntityId: null,
       hasFromEntityId: false,
-      multiEntity: false,
+      multiToken: false,
       entitySet: [],
       fromSet: [],
       hasFromSet: false,
-      multiEntityConnectors: [
-        {
-          id: 0,
-          from: [0, 1],
-          to: [2, 3],
-          type: "re prod",
-        },
-        {
-          id: 1,
-          from: [4, 5],
-          to: [6, 7],
-          type: "re char",
-        },
-      ],
+      subLabels: false,
+      subRels: false,
+      multiTokenConnectors: [],
+      submitWarning: "",
     };
   }
 
   componentDidMount() {
     console.log("we really made it!");
-    fetch("/api/rand/")
-      .then((res) => res.json())
+    Promise.all([fetch("/api/rand/"), fetch("/api/vrel_dois/")])
+      .then(([res1, res2]) => {
+        return Promise.all([res1.json(), res2.json()]);
+      })
       .then(
-        (result) => {
+        ([res1, res2]) => {
           this.setState({
             isLoaded: true,
-            title: result.content.title,
-            doi: result.content.doi,
-            text: result.content.text,
-            entities: result.content.entities,
+            title: res1.content.title,
+            doi: res1.content.doi,
+            text: res1.content.text,
+            entities: res1.content.entities,
+            vrelDOIs: res2.content.dois,
           });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components
 
         (error) => {
           this.setState({
@@ -129,18 +123,21 @@ export default class Label extends React.Component {
     }
     if (!this.state.checked) {
       if (e.keyCode === 8) {
-        if (!this.state.multiEntity) {
+        if (!this.state.multiToken) {
           let newConnectors = [...this.state.connectors];
           newConnectors.pop();
-          this.setState({ connectors: newConnectors });
+          this.setState({
+            connectors: newConnectors,
+            multiToken: false,
+          });
         } else {
-          let newMEConnectors = [...this.state.multiEntityConnectors];
+          let newMEConnectors = [...this.state.multiTokenConnectors];
           newMEConnectors.pop();
-          this.setState({ multiEntityConnectors: newMEConnectors });
+          this.setState({ multiTokenConnectors: newMEConnectors });
         }
       }
       if (e.keyCode === 49) {
-        this.setState({ multiEntity: true });
+        this.setState({ multiToken: true });
       }
       if (e.keyCode === 50) {
         this.setState({
@@ -151,23 +148,22 @@ export default class Label extends React.Component {
       }
       if (e.keyCode === 13) {
         let newConnector = {
-          id: this.state.multiEntityConnectors.length,
+          id: this.state.multiTokenConnectors.length,
           from: this.state.fromSet,
           to: this.state.entitySet,
           type: this.state.selectedReCategory,
         };
         this.setState({
-          multiEntity: false,
+          multiToken: false,
           hasFromSet: false,
-          multiEntityConnectors: this.state.multiEntityConnectors.concat([
+          multiTokenConnectors: this.state.multiTokenConnectors.concat([
             newConnector,
           ]),
         });
       }
       if (e.keyCode === 27) {
-        console.log(this.state.multiEntityConnectors);
         this.setState({
-          multiEntity: false,
+          multiToken: false,
           entitySet: [],
           fromSet: [],
           hasFromSet: false,
@@ -215,11 +211,11 @@ export default class Label extends React.Component {
       fromEntityId,
       connectors,
       selectedReCategory,
-      multiEntity,
+      multiToken,
       entitySet,
     } = this.state;
     this.setState({ selectedEntityID: id });
-    if (!multiEntity) {
+    if (!multiToken) {
       if (!hasFromEntityId) {
         this.setState({
           fromEntityId: id,
@@ -260,7 +256,7 @@ export default class Label extends React.Component {
         });
       }
     }
-    if (multiEntity) {
+    if (multiToken) {
       let newSet = [...entitySet].concat([id]);
       this.setState({ entitySet: [...new Set(newSet)].sort() });
     }
@@ -343,16 +339,112 @@ export default class Label extends React.Component {
       });
   };
 
+  async handleSubmitEnts() {
+    let { doi, entities, text } = this.state;
+    let timeStamp = Date.now();
+    let types = Array.prototype.map.call(entities, (e) => e[0]);
+    let startSpans = Array.prototype.map.call(entities, (e) => e[1]);
+    let endSpans = Array.prototype.map.call(entities, (e) => e[2]);
+    let surfaceForm = Array.prototype.map.call(entities, (e) =>
+      text.slice(e[1], e[2])
+    );
+    let dataPacket = {
+      doi,
+      types,
+      startSpans,
+      endSpans,
+      surfaceForm,
+      timeStamp,
+    };
+    let response = await fetch("/api/post_entities", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataPacket),
+    });
+    if (response.ok) {
+      this.setState({ subLabels: true, submitWarning: "" });
+      {
+        this.handleToggle();
+      }
+    }
+    ///can do stuff like indicate temp that entities were submitted.
+  }
+
+  async handleSubmitRels() {
+    if (this.state.subLabels) {
+      let { doi, connectors, multiTokenConnectors } = this.state;
+      let timeStamp = Date.now();
+      let dataPacket = { doi, connectors, multiTokenConnectors, timeStamp };
+      let response = await fetch("/api/post_relations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataPacket),
+      });
+
+      if (response.ok) {
+        this.setState({ subRels: true, submitWarning: "" });
+      }
+      //can do stuff to indicate temp that rel were submitted
+    } else {
+      //stylize to show in
+      this.setState({ submitWarning: "Gotta submit labels first!" });
+    }
+  }
+
+  async handleAnother() {
+    if (this.state.subLabels && this.state.subRels) {
+      let vrelDOIs = this.state.vrelDOIs;
+      let randDOI = vrelDOIs[Math.floor(Math.random() * vrelDOIs.length)];
+      vrelDOIs.splice(vrelDOIs.indexOf(randDOI), 1);
+      let query = randDOI.split("/").join("*");
+      fetch(`/api/${query}`)
+        .then((res) => res.json())
+        .then((result) => {
+          this.setState({
+            doi: result.content.doi,
+            title: result.content.title,
+            text: result.content.abstract,
+            entities: [],
+            vrelDOIs: vrelDOIs,
+            connectors: [],
+            multiTokenConnectors: [],
+            checked: true,
+            vrelDOIs: vrelDOIs,
+            subLabels: false,
+            subRels: false,
+            submitWarning: "",
+          });
+        });
+      ///when setting state filter the randDoi
+    } else if (this.state.subLabels && !this.state.subRels) {
+      this.setState({ submitWarning: "Submit relations first!" });
+    }
+  }
   renderMenu() {
     const isChecked = this.state.checked;
     if (isChecked) {
-      return <LabelMenu getRadioInfo={this.getRadioInfo} />;
+      return (
+        <LabelMenu
+          getRadioInfo={this.getRadioInfo}
+          handleSubmit={this.handleSubmitEnts}
+        />
+      );
     }
-    return <RelationshipMenu getRadioInfo={this.getRadioInfo} />;
+    return (
+      <RelationshipMenu
+        getRadioInfo={this.getRadioInfo}
+        multiTokenConnectors={this.state.multiTokenConnectors}
+        handleSubmit={this.handleSubmitRels}
+        handleAnother={this.handleAnother}
+        submitWarning={this.state.submitWarning}
+      />
+    );
   }
 
   renderCanvas = (text, connectors) => {
-    const { checked, abstractDim, entityDims, multiEntityConnectors } =
+    const { checked, abstractDim, entityDims, multiTokenConnectors } =
       this.state;
     if (!checked) {
       return (
@@ -361,7 +453,7 @@ export default class Label extends React.Component {
           abDim={abstractDim}
           connectors={connectors}
           entityDims={entityDims}
-          multiEntityConnectors={multiEntityConnectors}
+          multiTokenConnectors={multiTokenConnectors}
         />
       );
     } else {
@@ -371,7 +463,7 @@ export default class Label extends React.Component {
 
   render() {
     const { error, isLoaded, title, doi, checked } = this.state;
-    let { connectors, multiEntityConnectors } = this.state;
+    let { connectors, multiTokenConnectors, entities } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -393,14 +485,14 @@ export default class Label extends React.Component {
                 {this.renderCanvas(
                   abstractJSX,
                   connectors,
-                  multiEntityConnectors
+                  multiTokenConnectors
                 )}
                 <Toggle
                   togname="mode-switcher"
                   key="toggle"
                   id="toggle"
                   small={false}
-                  disabled={false}
+                  disabled={this.state.subLabels ? true : false}
                   checked={checked}
                   onChange={this.handleToggle}
                   optionlabels={["Label", "Link"]}
