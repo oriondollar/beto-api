@@ -191,9 +191,9 @@ class RelationCanvas extends Component {
       let fromProps = null;
       let toProps = null;
       let meId = f.key.match(/\d+/g).map(Number)[0];
-      let fromEntId = this.props.multiEntityConnectors[meId]["from"][0];
-      let toEntId = this.props.multiEntityConnectors[meId]["to"].slice(-1)[0];
-      let reType = this.props.multiEntityConnectors[meId]["type"];
+      let fromEntId = this.props.multiTokenConnectors[meId]["from"][0];
+      let toEntId = this.props.multiTokenConnectors[meId]["to"].slice(-1)[0];
+      let reType = this.props.multiTokenConnectors[meId]["type"];
       ///get props of to and from sets
       if (f.type == "Rect") {
         fromProps = f.props;
@@ -228,10 +228,10 @@ class RelationCanvas extends Component {
     let connectorArray = this.drawSEConnections(this.props.connectors)[
       "connectorArray"
     ];
-    let fromRects = this.props.multiEntityConnectors.map((c) =>
+    let fromRects = this.props.multiTokenConnectors.map((c) =>
       this.circleEntities(c.id, c.from, c.type)
     );
-    let toRects = this.props.multiEntityConnectors.map((c) =>
+    let toRects = this.props.multiTokenConnectors.map((c) =>
       this.circleEntities(c.id, c.to, c.type)
     );
     let meConnectors = this.drawMEConnections(fromRects, toRects)[
@@ -247,8 +247,8 @@ class RelationCanvas extends Component {
         <Layer>
           <Html className="canvas abstract">{this.props.text}</Html>
           {connectorArray}
-          {this.props.multiEntityConnectors.length ? fromRects : null}
-          {this.props.multiEntityConnectors.length ? toRects : null}
+          {this.props.multiTokenConnectors.length ? fromRects : null}
+          {this.props.multiTokenConnectors.length ? toRects : null}
           {meConnectors}
         </Layer>
       </Stage>
