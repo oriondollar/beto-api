@@ -3,7 +3,7 @@ import React from "react";
 class Entity extends React.Component {
 
   sendEntityInfo = () => {
-    this.props.getEntityInfo(this.props.id, this.props.type);
+    this.props.setEntityInfo(this.props.id, this.props.type);
   };
 
   render = () => {
