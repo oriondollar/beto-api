@@ -40,7 +40,6 @@ export default class Label extends React.Component {
   }
 
   componentDidMount() {
-    console.log("we really made it!");
     Promise.all([fetch("/api/rand/"), fetch("/api/vrel_dois/")])
       .then(([res1, res2]) => {
         return Promise.all([res1.json(), res2.json()]);
@@ -95,8 +94,6 @@ export default class Label extends React.Component {
   };
 
   handleKeyDown = (e) => {
-console.log(this.state.selectedEntityID) 
-console.log(this.state.checked); 
     if (this.state.selectedEntityID !== null && this.state.checked) {
       if (e.keyCode === 37) {
         let newID = this.state.selectedEntityID - 1;
@@ -398,7 +395,6 @@ console.log(this.state.checked);
   async handleAnother() {
     if (this.state.subLabels && this.state.subRels) {
       let vrelDOIs = this.state.vrelDOIs.splice(8,4);
-      console.log(vrelDOIs); 
       let randDOI = vrelDOIs[Math.floor(Math.random() * vrelDOIs.length)];
       vrelDOIs.splice(vrelDOIs.indexOf(randDOI), 1);
       let query = randDOI.split("/").join("*");
