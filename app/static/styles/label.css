@@ -128,11 +128,20 @@
   white-space: nowrap;
 }
 
+.sdsc {
+  background-color: #ff7f50;
+  white-space: nowrap;
+}
+
 .cmt {
   background-color: #e76f51;
   white-space: nowrap;
 }
 
+.ctdsc {
+  background-color: #4682b4;
+  white-space: nowrap;
+}
 .cres {
   background-color: #264653;
   white-space: nowrap;
@@ -164,7 +173,7 @@
 }
 
 .app {
-  background-color: #7e9dc2;
+  background-color: #4b0082;
   white-space: nowrap;
 }
 

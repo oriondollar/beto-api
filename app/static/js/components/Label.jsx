@@ -95,6 +95,8 @@ export default class Label extends React.Component {
   };
 
   handleKeyDown = (e) => {
+console.log(this.state.selectedEntityID) 
+console.log(this.state.checked); 
     if (this.state.selectedEntityID !== null && this.state.checked) {
       if (e.keyCode === 37) {
         let newID = this.state.selectedEntityID - 1;
@@ -395,16 +397,17 @@ export default class Label extends React.Component {
 
   async handleAnother() {
     if (this.state.subLabels && this.state.subRels) {
-      let vrelDOIs = this.state.vrelDOIs;
+      let vrelDOIs = this.state.vrelDOIs.splice(8,4);
+      console.log(vrelDOIs); 
       let randDOI = vrelDOIs[Math.floor(Math.random() * vrelDOIs.length)];
       vrelDOIs.splice(vrelDOIs.indexOf(randDOI), 1);
       let query = randDOI.split("/").join("*");
       fetch(`/api/${query}`)
         .then((res) => res.json())
-        .then((result) => {
+	.then((result) => {
           this.setState({
-            doi: result.content.doi,
-            title: result.content.title,
+           doi: result.content.doi,
+	    title: result.content.title,
             text: result.content.abstract,
             entities: [],
             vrelDOIs: vrelDOIs,

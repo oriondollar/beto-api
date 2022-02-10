@@ -24,15 +24,27 @@ class LabelMenu extends Component {
         labelName: "Synthesis Method",
         className: "category smt",
       },
+      // {
+      //   id: "radsdsc",
+      //   value: "entity sdsc",
+      //   labelName: "Synthesis Descriptor",
+      //   className: "category sdsc",
+      // },
       {
         id: "radcmt",
         value: "entity cmt",
         labelName: "Characterization Method",
         className: "category cmt",
       },
+      // {
+      //   id: "radctdsc",
+      //   value: "entity ctdsc",
+      //   labelName: "Characterization Descriptor",
+      //   className: "category ctdsc",
+      // },
       {
         id: "radcres",
-        value: "radcres",
+        value: "entity cres",
         labelName: "Characterization Result",
         className: "category cres",
       },
@@ -84,6 +96,7 @@ class LabelMenu extends Component {
   };
 
   render() {
+    const { handleSubmit } = this.props;
     return (
       <div className="row">
         <div className="col-md-1"></div>
@@ -112,7 +125,7 @@ class LabelMenu extends Component {
         <div className="col-md-4 submit-labels">
           <a
             className="btn btn-primary apple-button"
-            href="{{ url_for('home') }}"
+            onClick={handleSubmit}
             role="button"
           >
             Submit Labels
